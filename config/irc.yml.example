@@ -1,0 +1,7 @@
+3scale:
+  server: irc.freenet.net
+  #port: 61669
+  channels:
+  - '#channel'
+  #password: 'yourpassword'
+  nick: 'nick'

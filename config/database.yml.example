@@ -1,0 +1,3 @@
+3scale:
+  adapter: sqlite3
+  database: db/3scale.sqlite3
