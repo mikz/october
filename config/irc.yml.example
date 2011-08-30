@@ -5,3 +5,5 @@
   - '#channel'
   #password: 'yourpassword'
   nick: 'nick'
+  ssl:
+    use: true
