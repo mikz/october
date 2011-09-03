@@ -1,3 +1,5 @@
+gem 'pry'
+
 module October
   module Debugger
     extend ActiveSupport::Concern

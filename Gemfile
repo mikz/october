@@ -13,3 +13,6 @@ gem 'awesome_print'
 gem 'redis'
 gem 'hiredis'
 gem 'redis-namespace'
+
+# http stuff
+gem 'typhoeus'

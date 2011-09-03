@@ -13,6 +13,7 @@ GEM
       ruby_core_source (>= 0.1.4)
     method_source (0.6.0)
       ruby_parser (>= 2.0.5)
+    mime-types (1.16)
     pry (0.9.3)
       coderay (>= 0.9.8)
       method_source (>= 0.6.0)
@@ -36,6 +37,9 @@ GEM
       sexp_processor (~> 3.0)
     sexp_processor (3.0.6)
     slop (1.9.1)
+    typhoeus (0.2.4)
+      mime-types
+      mime-types
 
 PLATFORMS
   ruby
@@ -51,3 +55,4 @@ DEPENDENCIES
   redis
   redis-namespace
   ruby-debug19
+  typhoeus

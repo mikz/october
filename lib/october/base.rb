@@ -2,7 +2,7 @@ module October
   class Base < Cinch::Bot
     include Config
     include Redis
-    include Plugins
+    include Plugins.initialize
 
     def initialize
       super do

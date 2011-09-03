@@ -1,3 +1,4 @@
 config/irc.yml
 config/database.yml
 config/redis.yml
+config/plugins.yml

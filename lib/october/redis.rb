@@ -1,3 +1,5 @@
+gem 'redis'
+
 module October
   module Redis
     extend Environment
