@@ -6,5 +6,11 @@ module October
   autoload :Environment, 'october/environment'
   autoload :Redis, 'october/redis'
   autoload :Debugger, 'october/debugger'
+  autoload :Plugins, 'october/plugins'
+  autoload :Plugin, 'october/plugin'
+
+  def self.root
+    Pathname.new('.').expand_path
+  end
 end
 
