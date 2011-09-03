@@ -1,6 +1,7 @@
 module October
   class Base < Cinch::Bot
     include Config
+    include Redis
 
     def initialize
       super do
@@ -11,6 +12,7 @@ module October
         end
 
       end
+
     end
 
   end
