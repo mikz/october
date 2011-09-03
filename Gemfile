@@ -13,6 +13,7 @@ gem 'awesome_print'
 gem 'redis'
 gem 'hiredis'
 gem 'redis-namespace'
+gem 'redis-objects', :require => 'redis/objects'
 
 # http stuff
 gem 'typhoeus'

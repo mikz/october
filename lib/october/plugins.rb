@@ -14,7 +14,7 @@ module October
     end
 
     def import names
-      names.map!{ |name| name.classify }
+      names.map!{ |name| name.camelize }
       diff = registered.keys & (names - self)
       push *diff
       load diff
@@ -57,7 +57,7 @@ module October
           each_child(false).
             each do |child|
               next unless child.to_s =~ /\.rb$/
-              name = child.basename('.rb').to_s.classify
+              name = child.basename('.rb').to_s.camelize
               register name => child
             end
 
