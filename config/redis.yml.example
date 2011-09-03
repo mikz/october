@@ -1,3 +1,7 @@
-3scale:
+default: &default
   host: localhost
+
+test:
+  <<: *default
+  namespace: test
 

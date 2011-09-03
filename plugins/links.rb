@@ -6,6 +6,7 @@ class Links
   include October::Plugin
 
   prefix /^!links?(?:\s+)?/
+
   match /add\s+(\S+)(?:\s+)?(.+)?$/, method: :add
   match /list/, method: :list
   match '', method: :list

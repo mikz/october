@@ -14,6 +14,7 @@ module October
     end
 
     def import names
+      return unless names.present?
       names.map!{ |name| name.camelize }
       diff = registered.keys & (names - self)
       push *diff

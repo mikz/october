@@ -11,7 +11,11 @@ module October
     end
 
     def configuration(file, env = environment)
-      load_configuration(file)[env.to_sym] or raise NoSuchEnvironment.new "No environment #{env} in file #{file}"
+      load_configuration(file)[env.to_sym]
+    end
+
+    def configuration!(file, env = environment)
+      configuration(file, env) or raise NoSuchEnvironment.new("No environment #{env} in file #{file}")
     end
 
   end
