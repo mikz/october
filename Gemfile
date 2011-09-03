@@ -1,6 +1,6 @@
 source :rubygems
 gem 'cinch'#, :path => '../../cinch'
-gem 'rake'
+gem 'rake', :require => false
 gem 'activesupport', :require => 'active_support/core_ext'
 gem 'i18n'
 

@@ -1,25 +1,30 @@
-$:.unshift File.dirname(__FILE__)
 
-require 'boot'
-require 'october'
+task :environment, :env do |task, args|
+  ENV['OCTOBER_ENV'] ||= args[:env]
 
-task :create do
+  $:.unshift File.dirname(__FILE__)
+
+  require 'boot'
+  require 'october'
+
+end
+
+task :boot, [:env, :console] => :environment do |task, args|
+  @bot = October::Base.new
+end
+
+desc 'Starts IRC server'
+task :start, [:env, :console] => :boot do |task, args|
+  if args[:console]
+    Cinch::IRC.send :include, October::Debugger
   end
 
-task :start, :env, :console do |task, args|
-    ENV['OCTOBER_ENV'] ||= args[:env].presence
-
-    if args[:console]
-      puts 'including debugger'
-      Cinch::IRC.send :include, October::Debugger
-    end
-
-    @bot = October::Base.new
-    @bot.start
+  @bot.start
 end
 
-task :console, :env do |task, args|
-  Rake::Task['start'].invoke(args[:env], true)
+desc 'Creates interactive console with Pry'
+task :console, [:env] => :boot do |task, args|
+  @bot.pry
 end
 
-task :default => :start
+#task :default => :start
