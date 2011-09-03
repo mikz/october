@@ -1,10 +1,13 @@
 source :rubygems
-gem 'cinch'
+gem 'cinch'#, :path => '../../cinch'
 gem 'rake'
 gem 'activesupport', :require => 'active_support/core_ext'
 gem 'i18n'
+
+# debugging
 gem 'ruby-debug19'
 gem 'pry'
+gem 'awesome_print'
 
 # Redis stuff
 gem 'redis'

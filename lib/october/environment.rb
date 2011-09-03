@@ -6,7 +6,11 @@ module October
       YAML.load_file( File.join 'config', file ).with_indifferent_access
     end
 
-    def configuration(file, env = ENV['OCTOBER_ENV'].presence || 'default')
+    def environment
+       ENV['OCTOBER_ENV'].presence || 'default'
+    end
+
+    def configuration(file, env = environment)
       load_configuration(file)[env.to_sym] or raise NoSuchEnvironment.new "No environment #{env} in file #{file}"
     end
 

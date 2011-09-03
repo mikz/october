@@ -3,6 +3,7 @@ GEM
   specs:
     activesupport (3.0.10)
     archive-tar-minitar (0.5.2)
+    awesome_print (0.4.0)
     cinch (1.1.3)
     coderay (0.9.8)
     columnize (0.3.4)
@@ -41,6 +42,7 @@ PLATFORMS
 
 DEPENDENCIES
   activesupport
+  awesome_print
   cinch
   hiredis
   i18n
