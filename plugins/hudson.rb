@@ -5,6 +5,7 @@ class Hudson
 
   autoload :Fetcher, 'hudson/fetcher'
   autoload :Reporter, 'hudson/reporter'
+  autoload :TestRun, 'hudson/test_run'
 
   HYDRA = Typhoeus::Hydra.new
 

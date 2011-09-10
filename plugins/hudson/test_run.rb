@@ -16,9 +16,12 @@ class Hudson
       @failures ||= parse_failures
     end
 
-    def some
+    delegate :response, :to => :@fetcher
 
+    def log
+      response.body
     end
+
 
     private
     def parse_failures

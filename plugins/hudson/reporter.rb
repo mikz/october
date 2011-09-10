@@ -28,18 +28,29 @@ class Hudson
     end
 
     def respond format, message
-      if response.success?
-        message.user.msg content.call
-      elsif response.timed_out?
-        # aw hell no
-        message.reply("got a time out")
-      elsif response.code == 0
-        # Could not get an http response, something's wrong.
-        message.reply(response.curl_error_message)
-      else
-        # Received a non-successful http response.
-        message.reply("HTTP request failed: " + response.code.to_s)
+
+      if responses.all? &:success?
+        return message.user.msg self.send(format)
       end
+
+      responses(&:timed_out?).each do |r|
+        message.reply 'Some requests timed out :('
+      end
+
+      responses{|r| r.code == 0 }.each do |r|
+        message.reply r.curl_error_message
+      end
+
+      responses{|r| r.code != 200 }.each do |r|
+        message.reply "HTTP request failed: #{r.code}"
+      end
+
+    end
+
+    private
+
+    def responses(&block)
+      @tests.map(&:response).select &block
     end
 
   end

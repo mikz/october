@@ -14,16 +14,20 @@ class Hudson
 
       super(url, options)
 
-      fetcher.authorize = {
-        :username => user,
-        :password => pass
-      } if user = ENV['HUDSON_USER'] && pass = ENV['HUDSON_PASS']
+      self.authorize = {
+        :username => ENV['HUDSON_USER'].presence,
+        :password => ENV['HUDSON_PASS'].presence
+      }
 
     end
 
     def authorize= options
       @username = options[:username]
       @password = options[:password]
+    end
+
+    def response
+      @response or run
     end
 
     def run
