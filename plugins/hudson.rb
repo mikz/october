@@ -9,10 +9,10 @@ class Hudson
 
   HYDRA = Typhoeus::Hydra.new
 
-  match /hudson (?:failures|failed|f) (.+?)\/(\d+)/, method: :failures
-  match /hudson (?:failures|failed|f) (.+?)\/(\d+) diff (.+?)\/(\d+)/, method: :diff
-  register_help 'hudson failures|failed|f project/test_number', 'list all failed cucumbers'
-  register_help 'hudson failures|failed|f project/test_number diff another/test', 'list only difference between these two tests'
+  match /(?:failures|failed|f) (.+?)\/(\d+)/, method: :failures
+  match /(?:failures|failed|f) (.+?)\/(\d+) diff (.+?)\/(\d+)/, method: :diff
+  register_help 'failures|failed|f project/test_number', 'list all failed cucumbers'
+  register_help 'failures|failed|f project/test_number diff another/test', 'list only difference between these two tests'
 
   def failures(m, project, test_run)
     test = TestRun.new project, test_run
