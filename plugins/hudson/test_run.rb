@@ -5,9 +5,9 @@ class Hudson
 
     attr_reader :project, :number
 
-    def initialize(project, number)
+    def initialize(project, number = nil)
       @project = project
-      @number = number
+      @number = number.presence || 'lastBuild'
 
       @fetcher = Fetcher.new self
     end
