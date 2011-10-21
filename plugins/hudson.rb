@@ -11,7 +11,9 @@ class Hudson
 
   match /(?:failures|failed|f) (.+?)(?:\/(\d+))?$/, method: :failures
   match /(?:failures|failed|f) (.+?)\/(\d+) diff (.+?)\/(\d+)$/, method: :diff
-  register_help 'failures|failed|f project/test_number', 'list all failed cucumbers'
+
+  register_help 'failures|failed|f project', 'list failed tests (cukes and test units) from last test run'
+  register_help 'failures|failed|f project/test_number', 'list failed tests from specific test run'
   register_help 'failures|failed|f project/test_number diff another/test', 'list only difference between these two tests'
 
   def failures(m, project, test_run = nil)
