@@ -11,7 +11,10 @@ class Hudson
       @tests.map do |test|
         [
           "------- #{test.project}/#{test.number} -------",
-          test.failures
+          test.cucumbers,
+          test.test_unit.map { |name, file|
+            "#{file} -n '#{name}'"
+          }
         ]
       end.flatten.join("\n")
     end

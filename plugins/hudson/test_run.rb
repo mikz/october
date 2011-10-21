@@ -1,7 +1,11 @@
 class Hudson
   class TestRun
 
-    FAILURE = /^cucumber (?:.+?\/)(features\/.+?\.feature:\d+)/
+    CUCUMBERS = /^cucumber (?:.+?\/)(features\/.+?\.feature:\d+)/
+
+    TEST_UNIT = /\d+\) (?:Failure|Error):\n(.+?)(?:\n{2})/m
+    TEST_UNIT_NAME = /(.+)\((.+)\)[\n: ]+/
+    TEST_UNIT_FILES = /(?:(test\/.+.[a-z]+):\d+)+(?::in `.+')?/
 
     attr_reader :project, :number
 
@@ -12,8 +16,12 @@ class Hudson
       @fetcher = Fetcher.new self
     end
 
-    def failures
-      @failures ||= parse_failures
+    def cucumbers
+      @cucumbers ||= parse_cucumbers
+    end
+
+    def test_unit
+      @test_unit ||= parse_test_unit
     end
 
     delegate :response, :to => :@fetcher
@@ -24,13 +32,23 @@ class Hudson
 
 
     private
-    def parse_failures
-      failures = self.log.split("\n").map do |line|
-        line =~ FAILURE ? $1 : nil
-      end
-      failures.compact!
+    def parse_cucumbers
+      failures = self.log.scan(CUCUMBERS)
       failures.uniq!
       failures
+    end
+
+    def parse_test_unit
+      blocks = self.log.scan(TEST_UNIT).flatten
+
+      blocks.map! do |block|
+        [
+          block.scan(TEST_UNIT_NAME).first.first,
+          block.scan(TEST_UNIT_FILES).last
+        ].flatten
+      end
+
+      blocks
     end
   end
 end
