@@ -4,10 +4,11 @@ class Links
     value 'url'
     hash_key 'metadata'
 
-    attr_reader :id
+    attr_reader :id, :scope
 
-    def initialize id
+    def initialize id, scope = nil
       @id = id
+      @scope = scope.dup.freeze if scope
     end
     alias :meta :metadata
 
@@ -23,15 +24,27 @@ class Links
       %{#{id}) #{url} #{description} by #{user}}
     end
 
+    def remove
+      $redis.srem(scope, id)
+    end
+
     class << self
 
-      def find id
-        Link.new(id)
+      def find id, scope = nil
+        if scope = links(scope)
+          Link.new(id, scope) if $redis.sismember(scope, id)
+        else
+          Link.new(id)
+        end
       end
 
       def list scope
-        ids = $redis.smembers "links:#{scope}"
+        ids = $redis.smembers links(scope)
         ids.map { |id| Link.find(id) }
+      end
+
+      def links(scope)
+        "links:#{scope}" if scope
       end
 
       def create(url, scope, metadata = {})
@@ -45,9 +58,10 @@ class Links
 
         link.url = url
         link.metadata.bulk_set metadata
-        $redis.sadd "links:#{scope}", id
+        $redis.sadd links(scope), id
         link
       end
+
 
      end
   end
