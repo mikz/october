@@ -19,6 +19,8 @@ gem 'redis-objects', :require => 'redis/objects'
 # http stuff
 gem 'typhoeus'
 
+gem 'json'
+
 group :test do
   gem 'rspec'
 end
