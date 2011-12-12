@@ -1,0 +1,54 @@
+#!/usr/bin/env ruby
+
+require 'timeout'
+
+@parent = Process.pid
+@root = File.expand_path("..", File.dirname(__FILE__))
+
+def child
+ @child
+end
+
+def kill!
+  Process.kill('QUIT', child)
+  Process.wait(child)
+end
+
+def spawn!
+  parent = @parent
+  root = @root
+  @child = Process.fork do
+    $parent = parent
+
+    require File.join(root, "boot")
+
+    sleep(100)
+  end
+end
+
+Signal.trap("HUP") do
+  kill!
+  spawn!
+end
+
+Signal.trap("QUIT") do
+  kill!
+  shutdown
+end
+
+loop do
+  puts "inside loop"
+
+  begin
+    Process.wait(spawn!)
+    puts "process #{child} ended"
+  rescue Errno::ECHILD
+    puts "process #{child} died or was killed"
+  end
+
+  puts "spawning new one in next iteration"
+
+  sleep(10) # throttle spawning in case anything fails
+end
+
+
