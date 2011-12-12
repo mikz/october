@@ -3,11 +3,13 @@
 @root = File.expand_path("..", File.dirname(__FILE__))
 
 def child
- @child
+  @child
 end
 
 def spawn!
   @child = fork do
+    ENV['OCTOBER_ENV'] = ARGV.shift
+
     require File.join(@root, "boot")
     require 'october'
 
@@ -26,6 +28,6 @@ loop do
 
   puts "spawning new one in next iteration"
 
-  sleep(10) # throttle spawning in case anything fails
+  sleep(1) # throttle spawning in case anything fails
 end
 
