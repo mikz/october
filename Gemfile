@@ -6,9 +6,11 @@ gem 'activesupport', :require => 'active_support/core_ext'
 gem 'i18n'
 
 # debugging
-gem 'ruby-debug19'
-gem 'pry'
-gem 'awesome_print'
+group :development do
+  gem 'ruby-debug19'
+  gem 'pry'
+  gem 'awesome_print'
+end
 
 # Redis stuff
 gem 'redis'
