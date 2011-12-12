@@ -9,36 +9,17 @@ def child
  @child
 end
 
-def kill!
-  Process.kill('QUIT', child)
-  Process.wait(child)
-end
-
 def spawn!
-  parent = @parent
-  root = @root
-  @child = Process.fork do
-    $parent = parent
+  @child = fork do
+    require File.join(@root, "boot")
+    require 'october'
 
-    require File.join(root, "boot")
-
-    sleep(100)
+    @bot = October::Base.new
+    @bot.start
   end
 end
 
-Signal.trap("HUP") do
-  kill!
-  spawn!
-end
-
-Signal.trap("QUIT") do
-  kill!
-  shutdown
-end
-
 loop do
-  puts "inside loop"
-
   begin
     Process.wait(spawn!)
     puts "process #{child} ended"
@@ -50,5 +31,4 @@ loop do
 
   sleep(10) # throttle spawning in case anything fails
 end
-
 
