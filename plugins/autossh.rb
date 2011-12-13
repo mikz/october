@@ -12,7 +12,7 @@ class Autossh
       }
     end
 
-    m.reply "Found #{pid.count} autossh processes"
+    m.reply "Found #{pids.count} autossh processes"
 
     unless pids.empty?
       m.reply "Sending SIGUSR1 to pid: #{pids.join(", ")}"
