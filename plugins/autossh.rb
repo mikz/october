@@ -1,9 +1,9 @@
 class Autossh
   include October::Plugin
 
-  match /tunnel$/, method: :reconnect
+  match /tunnels?$/, method: :reconnect
 
-  register_help 'tunnel', 'Reconnects autossh tunnels'
+  register_help 'tunnel[s]', 'Reconnects autossh tunnels'
 
   def reconnect(m)
     pids = IO.popen('ps ux | grep "auto[s]sh"') do |io|
