@@ -6,6 +6,7 @@ class Update
   match /spawn (.+)$/, method: :spawn
   match /kill (-9 )?(.+)$/, method: :kill
   match /running$/, method: :running
+  match /run (.+)$/, method: :run
 
   $SPAWNS = []
 
@@ -32,6 +33,20 @@ class Update
     signal = kill ? 'KILL' : 'TERM'
     Process.kill(signal, pid)
     m.reply "sent #{signal} to process #{pid}"
+  end
+
+  def run(m, command)
+    pid = nil
+    IO.popen(command) do |f|
+      pid = Process.pid
+      $SPAWNS.push pid
+      m.reply "process command #{command} with pid #{pid} started:"
+      while row = f.gets
+        m.reply row
+      end
+    end
+    $SPAWNS.delete(pid)
+    m.reply "process #{pid} ended"
   end
 
   def spawn(m, command)
