@@ -37,7 +37,7 @@ class Update
 
   def run(m, command)
     pid = nil
-    IO.popen(command) do |f|
+    IO.popen(command, :err=>[:child, :out]) do |f|
       pid = Process.pid
       $SPAWNS.push pid
       m.reply "process command #{command} with pid #{pid} started:"
