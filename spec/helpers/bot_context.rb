@@ -1,3 +1,3 @@
 shared_context :bot do
-  before { @bot = October::Base.new }
+  let(:bot) { October::Base.new }
 end
