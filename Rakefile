@@ -1,3 +1,12 @@
+task :integrate do |task|
+  ENV['OCTOBER_ENV'] ||= 'test'
+
+  %w{redis.yml irc.yml plugins.yml}.each do |file|
+    File.open("config/#{file}", 'w') {|f| f.write("test:\n\tnothing: true") }
+  end
+
+  exec 'rspec spec'
+end
 
 task :environment, :env do |task, args|
   ENV['OCTOBER_ENV'] ||= args[:env]
