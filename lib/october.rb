@@ -1,5 +1,7 @@
 #require 'boot'
 
+require 'active_support/core_ext'
+
 module October
   autoload :Config, 'october/config'
   autoload :Base, 'october/base'

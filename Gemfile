@@ -1,6 +1,9 @@
 source :rubygems
 
-gem 'cinch'#, :path => '../../cinch'
+#gem 'cinch'
+# last gem relase is really outdated
+gem 'cinch', :git => 'https://github.com/cinchrb/cinch.git'
+
 gem 'rake', :require => false
 gem 'activesupport', :require => 'active_support/core_ext'
 gem 'i18n'

@@ -1,4 +1,5 @@
-gem 'redis'
+require 'redis'
+require 'hiredis'
 
 module October
   module Redis

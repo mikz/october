@@ -1,0 +1,23 @@
+ 1) Failure:
+test: Provider #signup_with_plans yields block with buyer and user should set validate_fields for buyer and user. (Logic::SignupTest)
+    [test/unit/logic/signup_test.rb:33:in `__bind_1327339644_618417'
+     shoulda (2.11.3) lib/shoulda/context.rb:382:in `call'
+     shoulda (2.11.3) lib/shoulda/context.rb:382:in `test: Provider #signup_with_plans yields block with buyer and user should set validate_fields for buyer and user. ']:
+<false> is not true.
+[WARN] S3 storage is not enabled.
+L*./test/te
+61 tests, 175 ass[WARN] S3 storage is not enabled.
+.....
+........................------......................................................................................................................................
+
+(::) failed steps (::)
+
+Field 'User extra required' with error not found.
+<false> is not true. (Test::Unit::AssertionFailedError)
+./features/step_definitions/fields_steps.rb:10
+./features/step_definitions/fields_steps.rb:9:in `each'
+./features/step_definitions/fields_steps.rb:9:in `/^I should see error in fields:$/'
+/var/lib/jenkins/jobs/michal/workspace/features/signup/fields.feature:47:in `Then I should see error in fields:'
+
+Failing Scenarios:
+cucumber /var/lib/jenkins/jobs/michal/workspace/features/signup/fields.feature:25 # Scenario: Required fields on signup

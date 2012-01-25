@@ -1,3 +1,6 @@
+require 'active_support/concern'
+require 'cinch'
+
 module October
   module Plugin
     autoload :Help, 'october/plugin/help'

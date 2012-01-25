@@ -1,3 +1,5 @@
+require 'cinch'
+
 module October
   class Base < Cinch::Bot
     include Config

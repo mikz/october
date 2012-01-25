@@ -37,20 +37,28 @@ class Update
 
   def run(m, command)
     pid = nil
-    IO.popen(command, :err=>[:child, :out]) do |f|
-      pid = Process.pid
+    puts "current pid is #{Process.pid}"
+    IO.popen(command, err: [:child, :out]) do |io|
+      pid = io.pid
       $SPAWNS.push pid
       m.reply "process command #{command} with pid #{pid} started:"
-      while row = f.gets
-        m.reply row
+      t = Thread.new do
+        while row = io.gets
+          m.reply row.strip
+        end
+      end
+      unless t.join(10)
+        Process.kill('KILL', pid) 
+        m.reply "process #{pid} killed beause of reading timeout (10s)"
+      else
+        m.reply "process #{pid} ended"
       end
     end
     $SPAWNS.delete(pid)
-    m.reply "process #{pid} ended"
   end
 
   def spawn(m, command)
-    pid = Process.spawn(command)
+    pid = Process.spawn(command, :out => ['/dev/null'])
 
     $SPAWNS.push pid
     m.reply "spawned command '#{command}' with pid #{pid}"

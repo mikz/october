@@ -3,7 +3,7 @@ require 'links'
 
 describe Links do
   describe "#prefix" do
-    subject { Links.instance_variable_get '@__cinch_prefix' }
+    subject { Links.prefix }
 
     it { should match '!link' }
     it { should match '!links' }

@@ -1,4 +1,4 @@
-gem 'typhoeus'
+require 'typhoeus'
 
 class Hudson
   include October::Plugin
@@ -9,8 +9,12 @@ class Hudson
 
   HYDRA = Typhoeus::Hydra.new
 
-  match /(?:failures|failed|f) (.+?)(?:\/(\d+))?$/, method: :failures
-  match /(?:failures|failed|f) (.+?)\/(\d+) diff (.+?)\/(\d+)$/, method: :diff
+  FAILED = /(?:failures|failed|f)/
+  BUILD = /(?:\/(\d+))?/
+  JOB = /(\w+?)/
+
+  match /#{FAILED} #{JOB}#{BUILD}$/, method: :failures
+  match /(?:failures|failed|f) #{JOB}#{BUILD} diff #{JOB}#{BUILD}$/, method: :diff
 
   register_help 'failures|failed|f project', 'list failed tests (cukes and test units) from last test run'
   register_help 'failures|failed|f project/test_number', 'list failed tests from specific test run'
@@ -30,7 +34,6 @@ class Hudson
     reporter = Reporter.new *tests
 
     reporter.respond :diff, m
-
   end
 
 end

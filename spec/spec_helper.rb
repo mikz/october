@@ -6,6 +6,8 @@ ENV['OCTOBER_ENV'] ||= 'test'
 require 'boot'
 require 'october'
 
+Bundler.require :test, :development
+
 Dir['spec/helpers/**/*.rb'].each do |helper|
   require helper
 end
