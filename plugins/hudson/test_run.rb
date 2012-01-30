@@ -15,6 +15,7 @@ class Hudson
       def to_s
         @file
       end
+      alias :to_str :to_s
 
       def ==(other)
         to_s == other.try(:to_s)
@@ -42,6 +43,7 @@ class Hudson
       def to_s
         "#{@file} -n '#{@name}'"
       end
+      alias :to_str :to_s
 
       def ==(other)
         to_s == other.try(:to_s)
