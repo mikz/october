@@ -1,5 +1,6 @@
 require 'redis'
 require 'hiredis'
+require 'active_support/core_ext/hash/keys'
 
 module October
   module Redis
@@ -7,7 +8,6 @@ module October
 
     def self.included(base)
       return unless config = Redis.configuration('redis.yml')
-      config.symbolize_keys!
       # FIXME: parhaps more options, fetch from redis directly, or pass them all and let redis to handle it?
       redis = ::Redis.new config.slice :host, :port, :path
       if config.has_key? :namespace

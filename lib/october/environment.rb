@@ -3,8 +3,8 @@ module October
     class NoSuchEnvironment < StandardError; end
 
     def load_configuration(file)
-      config = File.join 'config', file
-      return {} unless File.exists?(file)
+      config = File.join('config', file)
+      return {} unless File.exists?(config)
       YAML.load_file( config ).with_indifferent_access
     end
 
