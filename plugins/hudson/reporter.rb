@@ -36,7 +36,7 @@ class Hudson
       end
 
       def common
-        @base.failures & @other.failures
+        prefix(' ', @base.failures & @other.failures)
       end
 
       def prefix(str, array)
