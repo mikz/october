@@ -16,8 +16,22 @@ Field 'User extra required' with error not found.
 <false> is not true. (Test::Unit::AssertionFailedError)
 ./features/step_definitions/fields_steps.rb:10
 ./features/step_definitions/fields_steps.rb:9:in `each'
+./test/unit/bcms/connector_test.rb:10:in `test_should_have_same_account_id_as_page_it_is_connected_to'
 ./features/step_definitions/fields_steps.rb:9:in `/^I should see error in fields:$/'
 /var/lib/jenkins/jobs/michal/workspace/features/signup/fields.feature:47:in `Then I should see error in fields:'
 
 Failing Scenarios:
 cucumber /var/lib/jenkins/jobs/michal/workspace/features/signup/fields.feature:25 # Scenario: Required fields on signup
+
+  1) Error:
+test: Connector should require account to be set. (ConnectorTest):
+NoMethodError: undefined method `account=' for #<Connector:0x23304350>
+    shoulda (2.11.3) lib/shoulda/active_record/matchers/allow_value_matcher.rb:42:in `send'
+    shoulda (2.11.3) lib/shoulda/active_record/matchers/allow_value_matcher.rb:42:in `matches?'
+    shoulda (2.11.3) lib/shoulda/active_record/matchers/validation_matcher.rb:43:in `disallows_value_of'
+    shoulda (2.11.3) lib/shoulda/active_record/matchers/validate_presence_of_matcher.rb:32:in `matches?'
+    shoulda (2.11.3) lib/shoulda/assertions.rb:53:in `assert_accepts'
+    shoulda (2.11.3) lib/shoulda/context.rb:324:in `__bind_1328529213_791247'
+    shoulda (2.11.3) lib/shoulda/context.rb:382:in `call'
+    shoulda (2.11.3) lib/shoulda/context.rb:382:in `test: Connector should require account to be set. '
+

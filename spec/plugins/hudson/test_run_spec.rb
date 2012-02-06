@@ -10,5 +10,8 @@ describe Hudson::TestRun do
   subject { test_run }
 
   its(:cucumbers) { should == ['features/signup/fields.feature:25'] }
-  its(:test_unit) { should == ["test/unit/logic/signup_test.rb -n 'test: Provider #signup_with_plans yields block with buyer and user should set validate_fields for buyer and user. '"] }
+  its(:test_unit) { should == [
+    "test/unit/logic/signup_test.rb -n 'test: Provider #signup_with_plans yields block with buyer and user should set validate_fields for buyer and user. '",
+    "(missing file) -n 'test: Connector should require account to be set. '"
+  ] }
 end

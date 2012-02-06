@@ -31,7 +31,7 @@ class Hudson
         blocks = log.scan(PATTERN).flatten
         blocks.map do |block|
           name = block.scan(NAME).first.first
-          file = block.scan(FILE).last.last
+          file = block.scan(FILE).last.try(:join) || '(missing file)'
           self.new(name, file)
         end
       end
