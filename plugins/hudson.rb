@@ -11,7 +11,7 @@ class Hudson
 
   FAILED = /(?:failures|failed|f)/
   BUILD = /(?:\/(\d+))?/
-  JOB = /(\w+?)/
+  JOB = /([\w\-]+?)/
 
   match /#{FAILED} #{JOB}#{BUILD}$/, method: :failures
   match /(?:failures|failed|f) #{JOB}#{BUILD} diff #{JOB}#{BUILD}$/, method: :diff

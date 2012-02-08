@@ -27,6 +27,10 @@ describe Hudson do
         it { should == [diff] }
       end
 
+      describe "!f my-job" do
+        it { should == [failures] }
+      end
+
       describe "!f job/21" do
         it { should == [failures] }
       end
