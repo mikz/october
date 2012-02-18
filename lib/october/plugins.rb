@@ -9,16 +9,22 @@ module October
       import Plugins.configuration('plugins.yml')
     end
 
-    def registered
-      self.class.registered
-    end
+    delegate :registered, :configure, :to => :'self.class'
 
-    def import names
-      return unless names.present?
-      names.map!{ |name| name.camelize }
+    def import plugins
+      return unless plugins.present?
+
+      plugins = Hash[ plugins.map {|plugin|
+        plugin.respond_to?(:to_a) ? plugin.to_a.flatten(1) : [plugin, {}]
+      }].with_indifferent_access
+
+      names = plugins.keys.map {|name| name.camelize }
+
       diff = registered.keys & (names - self)
       push *diff
       load diff
+
+      self.class.configure(plugins)
     end
 
     def imported
@@ -52,14 +58,15 @@ module October
     class << self
 
       @@plugins = {}
+      @@configs = {}.with_indifferent_access
 
       def initialize
         October.root.join('plugins').
           each_child(false).
-            each do |child|
-              next unless child.to_s =~ /\.rb$/
-              name = child.basename('.rb').to_s.camelize
-              register name => child
+            each do |file|
+              next unless file.to_s =~ /\.rb$/
+              name = file.basename('.rb').to_s.camelize
+              register name => file
             end
 
         PluginMethods
@@ -67,6 +74,14 @@ module October
 
       def register plugin
         @@plugins.merge! plugin
+      end
+
+      def config(plugin)
+        @@configs.fetch(plugin, {})
+      end
+
+      def configure(plugin)
+        @@configs.merge! plugin
       end
 
       def registered
