@@ -8,8 +8,18 @@ module October
     extend ActiveSupport::Concern
 
     included do
-      self.send :include, Cinch::Plugin
-      self.send :extend, Help
+      include Cinch::Plugin
+      extend Help
+    end
+
+    module ClassMethods
+      def name
+        to_s.underscore
+      end
+
+      def config
+        October::Plugins.config(name)
+      end
     end
 
   end
