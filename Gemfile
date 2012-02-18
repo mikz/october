@@ -10,8 +10,8 @@ gem 'i18n'
 
 # debugging
 group :development do
-  gem 'ruby-debug19'
   gem 'pry'
+  gem 'pry-nav'
   gem 'awesome_print'
 end
 
@@ -23,6 +23,9 @@ gem 'redis-objects', :require => 'redis/objects'
 
 # http stuff
 gem 'typhoeus'
+
+# issues stuff
+gem 'github_api'
 
 gem 'json'
 
