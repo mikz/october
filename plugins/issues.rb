@@ -4,8 +4,8 @@ class Issues
   include October::Plugin
 
   prefix /^!issues? /
-  register_help 'create', 'ceate issue'
-  register_help 'convert number', 'convert issue to pull request'
+  register_help 'issue create title', 'ceate issue'
+  register_help 'issue convert number head => base', 'convert issue to pull request'
 
   match /create (.+)$/, method: :create
   match /convert (\d+) (.+?)\s*=>\s*(.+)$/, method: :convert
