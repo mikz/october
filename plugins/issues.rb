@@ -16,7 +16,7 @@ class Issues
   end
 
   def convert(m, number, head, base)
-    pull = api.pull_request.create_request nil, nil, :issue => number, :head => head, :base => base
+    pull = api.pull_requests.create_request nil, nil, :issue => number, :head => head, :base => base
     m.reply "converted issue #{number} to pull request"
   end
 
