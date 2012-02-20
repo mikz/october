@@ -12,12 +12,20 @@ class Issues
 
   def create(m, text)
     issue = api.issues.create_issue nil, nil, :title => text
-    m.reply "created issue #{issue.number} - #{issue.html_url}"
+    if issue
+      m.reply "created issue #{issue.number} - #{issue.html_url}"
+    else
+      m.reply "issue was not created"
+    end
   end
 
   def convert(m, number, head, base)
     pull = api.pull_requests.create_request nil, nil, :issue => number, :head => head, :base => base
-    m.reply "converted issue #{number} to pull request"
+    if pull
+      m.reply "converted issue #{number} to pull request"
+    else
+      m.reply "issue was not converted to pull request"
+    end
   end
 
   private
