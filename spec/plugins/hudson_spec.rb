@@ -34,6 +34,10 @@ describe Hudson do
       describe "!f job/21" do
         it { should == [failures] }
       end
+
+      describe "!f my-job-1.9.3" do
+        it { should == [failures] }
+      end
     end
 
   end
