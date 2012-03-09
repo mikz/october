@@ -4,7 +4,7 @@ class Issues
   include October::Plugin
 
   prefix /^!issues? /
-  register_help 'issue create title', 'ceate issue'
+  register_help 'issue create title', 'create issue'
   register_help 'issue convert number head => base', 'convert issue to pull request'
 
   match /create (.+)$/, method: :create
@@ -21,11 +21,14 @@ class Issues
 
   def convert(m, number, head, base)
     pull = api.pull_requests.create_request nil, nil, :issue => number, :head => head, :base => base
+
     if pull
-      m.reply "converted issue #{number} to pull request"
+      m.reply "Simba, there is a new pull request! #{pull.url}"
     else
-      m.reply "issue was not converted to pull request"
+      m.reply "Failed to convert issue to pull request."
     end
+  rescue Github::UnprocessableEntity => e
+    m.reply "Converting failed: "  + e.message
   end
 
   private
