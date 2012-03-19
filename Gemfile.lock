@@ -33,6 +33,7 @@ GEM
     mime-types (1.17.2)
     multi_json (1.0.4)
     multipart-post (1.1.5)
+    nokogiri (1.5.0)
     oauth2 (0.5.2)
       faraday (~> 0.7)
       multi_json (~> 1.0)
@@ -77,6 +78,7 @@ DEPENDENCIES
   hiredis
   i18n
   json
+  nokogiri
   pry
   pry-nav
   rake
