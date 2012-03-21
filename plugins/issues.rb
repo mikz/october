@@ -12,7 +12,7 @@ class Issues
 
   def create(m, text)
     Retryable.new(2) do |attempt|
-      issue = api.issues.create_issue(nil, nil, :title => text)
+      issue = api.issues.create_issue(nil, nil, IssueParser.new(text).to_hash)
 
       if issue
         m.reply "created issue #{issue.number} - #{issue.html_url}"
@@ -70,6 +70,54 @@ class Issues
       attempts.times do |attempt|
         return if @block.call(attempt + 1)
       end
+    end
+  end
+
+  class IssueParser
+    def initialize(text)
+      @text = text
+    end
+
+    def tokens
+      @tokens ||= @text.split('|').map(&:strip)
+    end
+
+    def parse(name)
+      [tokens.find{ |t| t =~ /^#{name}:\s*(.+)$/ }, $1]
+    end
+
+    def attr(name)
+      parse(name).last
+    end
+
+    def token(name)
+      parse(name).first
+    end
+
+    def milestone
+      attr(:milestone)
+    end
+
+    def title
+      tokens.first
+    end
+
+    def body
+      except = [token(:milestone), token(/assigne{2}?/), title]
+      tokens.find {|t| not except.include?(t) }
+    end
+
+    def assignee
+      attr(/assigne{2}?/)
+    end
+
+    def to_hash
+      {
+        title: title,
+        body: body,
+        milestone: milestone,
+        assignee: assignee
+      }
     end
   end
 
