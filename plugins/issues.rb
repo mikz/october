@@ -5,6 +5,10 @@ class Issues
 
   prefix /^!issues? /
   register_help 'issue create title', 'create issue'
+  register_help 'issue create title | body', 'create issue with body'
+  register_help 'issue create title | milestone: 2', 'create issue for milestone'
+  register_help 'issue create title | assign: someone', 'create assigned issue'
+  register_help 'issue create title | assign: someone | body | milestone: 3', 'combined approach to create issue'
   register_help 'issue convert number head => base', 'convert issue to pull request'
 
   match /create (.+)$/, method: :create
