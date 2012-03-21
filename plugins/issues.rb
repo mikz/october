@@ -26,6 +26,8 @@ class Issues
         false
       end
     end.run!
+  rescue Github::UnprocessableEntity => e
+    m.reply "Converting failed: "  + e.message
   end
 
   def convert(m, number, head, base)
