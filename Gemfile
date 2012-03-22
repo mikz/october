@@ -24,7 +24,7 @@ gem 'redis-objects', :require => 'redis/objects'
 # http stuff
 gem 'typhoeus'
 
-# issues stuff
+# issues stuff - https://github.com/peter-murach/github/
 gem 'github_api'
 
 gem 'json'
