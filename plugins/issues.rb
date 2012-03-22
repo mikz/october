@@ -3,7 +3,7 @@ require 'github_api'
 class Issues
   include October::Plugin
 
-  prefix /^!issues? /
+  prefix /(^!)?issues? +/
   register_help 'issue create title', 'create issue'
   register_help 'issue create title | body', 'create issue with body'
   register_help 'issue create title | milestone: 2', 'create issue for milestone'
