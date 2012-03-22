@@ -3,7 +3,7 @@ require 'github_api'
 class Issues
   include October::Plugin
 
-  prefix /(?:^!)?issues? +/
+  prefix /^!issues? /
   register_help 'issue create title', 'create issue'
   register_help 'issue create title | body', 'create issue with body'
   register_help 'issue create title | milestone: 2', 'create issue for milestone'
@@ -13,7 +13,7 @@ class Issues
 
   match /create (.+)$/, method: :create
   match /convert (\d+) (.+?)\s*=>\s*(.+)$/, method: :convert
-  match /#(\d+)/, method: :link
+  match /issue #(\d+)/, method: :link, use_prefix: false
 
   def create(m, text)
     Retryable.new(2) do |attempt|
