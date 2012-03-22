@@ -13,6 +13,7 @@ class Issues
 
   match /create (.+)$/, method: :create
   match /convert (\d+) (.+?)\s*=>\s*(.+)$/, method: :convert
+  match /#(\d+)/, method: :link
 
   def create(m, text)
     Retryable.new(2) do |attempt|
@@ -49,6 +50,15 @@ class Issues
         m.reply "issue was not converted to pull request"
         false
       end
+    end.run!
+  rescue Github::UnprocessableEntity => e
+    m.reply "Converting failed: "  + e.message
+  end
+
+  def link(m, number)
+    Retryable.new(2) do |attempt|
+      issue = api.issues.issue(api.user, api.repo, number)
+      m.reply "#{issue.html_url} - #{issue.title}"
     end.run!
   rescue Github::UnprocessableEntity => e
     m.reply "Converting failed: "  + e.message
