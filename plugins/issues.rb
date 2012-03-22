@@ -11,57 +11,38 @@ class Issues
   register_help 'issue create title | assign: someone | body | milestone: 3', 'combined approach to create issue'
   register_help 'issue convert number head => base', 'convert issue to pull request'
 
+  GIT = /[a-z0-9]{7}|[a-z0-9]{40}/
   match /create (.+)$/, method: :create
   match /convert (\d+) (.+?)\s*=>\s*(.+)$/, method: :convert
-  match /issue #(\d+)/, method: :link, use_prefix: false
+  match /issue #(\d+)/, method: :issue, use_prefix: false
+  match /commit ([a-z0-9]{7}|[a-z0-9]{40})(?:[^a-z0-9]|$)/, method: :commit, use_prefix: false
 
   def create(m, text)
-    Retryable.new(2) do |attempt|
-      issue = api.issues.create_issue(nil, nil, IssueParser.new(text).to_hash)
-
-      if issue
-        m.reply "created issue #{issue.number} - #{issue.html_url}"
-
-      elsif attempt < 2
-        m.reply "issue wasn't created, retrying"
-        false
-
-      else
-        m.reply "issue can't be created. sorry"
-        false
-      end
-    end.run!
+    issue = Retryable.do { api.issues.create_issue(nil, nil, IssueParser.new(text).to_hash) }
+    m.reply "created issue #{issue.number} - #{issue.html_url}"
   rescue Github::UnprocessableEntity => e
     m.reply "Converting failed: "  + e.message
   end
 
   def convert(m, number, head, base)
-    Retryable.new(2) do |attempt|
-      pull = api.pull_requests.create_request nil, nil, :issue => number, :head => head, :base => base
-
-      if pull
-        m.reply "Simba, there is a new pull request! #{pull.html_url}"
-
-      elsif attempt < 2
-        m.reply "issue wasn't converted, retrying"
-        false
-
-      else
-        m.reply "issue was not converted to pull request"
-        false
-      end
-    end.run!
+    pull = Retryable.do { api.pull_requests.create_request nil, nil, :issue => number, :head => head, :base => base }
+    m.reply "Simba, there is a new pull request! #{pull.html_url}"
   rescue Github::UnprocessableEntity => e
     m.reply "Converting failed: "  + e.message
   end
 
-  def link(m, number)
-    Retryable.new(2) do |attempt|
-      issue = api.issues.issue(api.user, api.repo, number)
-      m.reply "#{issue.html_url} - #{issue.title}"
-    end.run!
+  def issue(m, number)
+    issue = Retryable.do { api.issues.issue(api.user, api.repo, number) }
+    m.reply "#{issue.html_url} - #{issue.title}"
   rescue Github::UnprocessableEntity => e
     m.reply "Converting failed: "  + e.message
+  end
+
+  def commit(m, rev)
+    commit = Retryable.do { api.git_data.commit nil, nil, rev }
+    m.reply "https://github.com/#{api.user}/#{api.repo}/commit/#{commit.sha} by #{commit.author.name}"
+  rescue Github::ResourceNotFound
+    m.reply "sorry, but commit #{rev} was not found"
   end
 
   private
@@ -84,8 +65,13 @@ class Issues
 
     def run!
       attempts.times do |attempt|
-        return if @block.call(attempt + 1)
+        value = @block.call(attempt + 1)
+        return value if value
       end
+    end
+
+    def self.do &block
+      new(&block).run!
     end
   end
 
