@@ -53,11 +53,10 @@ class Issues
 
   # this method is used by the hudson plugin to figure out if a branch matches a pull request
   def pull_request(m, branch_name)
-     Retryable.do do
-       api.pull_requests.pull_requests(api.user, api.repo).detect do |pr|
-         full_pr = api.pull_requests.pull_request(api.user, api.repo, pr["number"])
-         return full_pr if full_pr["head"]["ref"] == branch_name
-       end
+     pulls = Retryable.do { api.pull_requests.pull_requests(api.user, api.repo)}
+     pulls.detect do |pr|
+       full_pr = Retryable.do { api.pull_requests.pull_request(api.user, api.repo, pr["number"]) }
+       return full_pr if full_pr["head"]["ref"] == branch_name
      end
      nil
   rescue Github::ResourceNotFound
