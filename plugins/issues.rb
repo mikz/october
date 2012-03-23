@@ -45,6 +45,24 @@ class Issues
     m.reply "sorry, but commit #{rev} was not found"
   end
 
+  def comment(m, number, message)
+    Retryable.do { api.issues.create_comment(api.user, api.repo, number, "body" => message)}
+  rescue Github::ResourceNotFound
+    m.reply "sorry, but an error occurred while posting your comment"
+  end
+
+  # this method is used by the hudson plugin to figure out if a branch matches a pull request
+  def pull_request(m, branch_name)
+     pulls = Retryable.do { api.pull_requests.pull_requests(api.user, api.repo)}
+     pulls.detect do |pr|
+       full_pr = Retryable.do { api.pull_requests.pull_request(api.user, api.repo, pr["number"]) }
+       return full_pr if full_pr["head"]["ref"] == branch_name
+     end
+     nil
+  rescue Github::ResourceNotFound
+    m.reply "sorry, but an error occurred while fetching your pull request"
+  end
+
   private
 
   def config

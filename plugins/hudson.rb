@@ -15,6 +15,7 @@ class Hudson
 
   match /#{FAILED} #{JOB}#{BUILD}$/, method: :failures
   match /(?:failures|failed|f) #{JOB}#{BUILD} diff #{JOB}#{BUILD}$/, method: :diff
+  match /Project (.+?) build #(\d+): (?:SUCCESS|FIXED) (?:.+?): (.*)$/, method: :green, :use_prefix => false
 
   register_help 'failures|failed|f project', 'list failed tests (cukes and test units) from last test run'
   register_help 'failures|failed|f project/test_number', 'list failed tests from specific test run'
@@ -36,4 +37,12 @@ class Hudson
     reporter.respond :diff, m
   end
 
+  def green(m, project_name, build, url)
+    if October::Plugins.registered["Hudson"]
+      tr = TestRun.new(project_name, build)
+      issues = @bot.plugins.detect{|a| a.is_a? Issues}
+      pull = issues.pull_request(m, tr.branch)
+      issues.comment(m, pull["number"], "Green: #{url}") if pull
+    end
+  end
 end

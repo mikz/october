@@ -68,6 +68,10 @@ class Hudson
       @test_unit ||= TestUnit.parse(log)
     end
 
+    def branch
+      log.scan(/Commencing build of Revision (?:.+?) \(origin\/(.+?)\)(.*)/).first.first
+    end
+
     def all
       cucumbers + test_unit
     end
