@@ -18,7 +18,7 @@ class Issues
   match /commit ([a-z0-9]{7}|[a-z0-9]{40})(?:[^a-z0-9]|$)/, method: :commit, use_prefix: false
 
   def create(m, text)
-    issue = Retryable.do { api.issues.create_issue(nil, nil, IssueParser.new(text).to_hash) }
+    issue = Retryable.do { api.issues.create_issue(nil, nil, IssueParser.new(text).by(m.user.nick).to_hash) }
     m.reply "created issue #{issue.number} - #{issue.html_url}"
   rescue Github::UnprocessableEntity => e
     m.reply "Converting failed: "  + e.message
@@ -104,6 +104,11 @@ class Issues
       tokens.first
     end
 
+    def by(user)
+      @user = user
+      self
+    end
+
     def body
       except = [token(:milestone), token(/assigne{2}?/), title]
       tokens.find {|t| not except.include?(t) }
@@ -113,10 +118,12 @@ class Issues
       attr(/assigne{2}?/)
     end
 
-    def to_hash
+    def to_hash(user = @user)
+      text = body ? body.dup : ""
+      text += "\nrequested by: #{user}" if user
       {
         title: title,
-        body: body,
+        body: text,
         milestone: milestone,
         assignee: assignee
       }
