@@ -56,9 +56,10 @@ class Issues
      Retryable.do do
        api.pull_requests.pull_requests(api.user, api.repo).detect do |pr|
          full_pr = api.pull_requests.pull_request(api.user, api.repo, pr["number"])
-         full_pr["head"]["ref"] == branch_name
+         return full_pr if full_pr["head"]["ref"] == branch_name
        end
      end
+     nil
   rescue Github::ResourceNotFound
     m.reply "sorry, but an error occurred while fetching your pull request"
   end
@@ -84,7 +85,7 @@ class Issues
     def run!
       attempts.times do |attempt|
         value = @block.call(attempt + 1)
-        return value
+        return value if value
       end
     end
 
