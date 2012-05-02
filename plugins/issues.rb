@@ -14,7 +14,7 @@ class Issues
   GIT = /[a-z0-9]{7}|[a-z0-9]{40}/
   match /create (.+)$/, method: :create
   match /convert (\d+) (.+?)\s*=>\s*(.+)$/, method: :convert
-  match /issue #(\d+)/, method: :issue, use_prefix: false
+  match /(?:issue\s+)?#(\d+)/, method: :issue, use_prefix: false
   match /commit ([a-z0-9]{7}|[a-z0-9]{40})(?:[^a-z0-9]|$)/, method: :commit, use_prefix: false
 
   def create(m, text)
@@ -32,8 +32,9 @@ class Issues
   end
 
   def issue(m, number)
-    issue = Retryable.do { api.issues.issue(api.user, api.repo, number) }
-    m.reply "#{issue.html_url} - #{issue.title}"
+    if issue = Retryable.do { api.issues.issue(api.user, api.repo, number) }
+      m.reply "#{issue.html_url} - #{issue.title}"
+    end
   rescue Github::UnprocessableEntity => e
     m.reply "Converting failed: "  + e.message
   end
