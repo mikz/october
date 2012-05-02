@@ -21,14 +21,14 @@ class Issues
     issue = Retryable.do { api.issues.create_issue(nil, nil, IssueParser.new(text).by(m.user.nick).to_hash) }
     m.reply "created issue #{issue.number} - #{issue.html_url}"
   rescue Github::UnprocessableEntity => e
-    m.reply "Converting failed: "  + e.message
+    m.user.reply "Creation failed: "  + e.message
   end
 
   def convert(m, number, head, base)
     pull = Retryable.do { api.pull_requests.create_request nil, nil, :issue => number, :head => head, :base => base }
     m.reply "Simba, there is a new pull request! #{pull.html_url}"
   rescue Github::UnprocessableEntity => e
-    m.reply "Converting failed: "  + e.message
+    m.user.reply "Converting failed: "  + e.message
   end
 
   def issue(m, number)
@@ -36,20 +36,20 @@ class Issues
       m.reply "#{issue.html_url} - #{issue.title}"
     end
   rescue Github::UnprocessableEntity => e
-    m.reply "Converting failed: "  + e.message
+    m.user.reply "Issue failed: "  + e.message
   end
 
   def commit(m, rev)
     commit = Retryable.do { api.git_data.commit nil, nil, rev }
     m.reply "https://github.com/#{api.user}/#{api.repo}/commit/#{commit.sha} by #{commit.author.name}"
   rescue Github::ResourceNotFound
-    m.reply "sorry, but commit #{rev} was not found"
+    m.user.reply "sorry, but commit #{rev} was not found"
   end
 
   def comment(m, number, message)
     Retryable.do { api.issues.create_comment(api.user, api.repo, number, "body" => message)}
   rescue Github::ResourceNotFound
-    m.reply "sorry, but an error occurred while posting your comment"
+    m.user.reply "sorry, but an error occurred while posting your comment"
   end
 
   # this method is used by the hudson plugin to figure out if a branch matches a pull request
@@ -61,7 +61,7 @@ class Issues
      end
      nil
   rescue Github::ResourceNotFound
-    m.reply "sorry, but an error occurred while fetching your pull request"
+    m.user.reply "sorry, but an error occurred while fetching your pull request"
   end
 
   private
