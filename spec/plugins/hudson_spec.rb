@@ -17,7 +17,7 @@ describe Hudson do
 
     # FIXME: this is really silly solution
     let(:failures) { handlers.first }
-    let(:diff) { handlers.last }
+    let(:diff) { handlers.second }
 
     describe "valid message" do
       subject { bot.handlers.find(:message, message) }
