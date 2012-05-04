@@ -18,21 +18,21 @@ class Issues
   match /commit ([a-z0-9]{7}|[a-z0-9]{40})(?:[^a-z0-9]|$)/, method: :commit, use_prefix: false
 
   def create(m, text)
-    issue = Retryable.do { api.issues.create_issue(nil, nil, IssueParser.new(text).by(m.user.nick).to_hash) }
+    issue = Retryable.do { api.issues.create(nil, nil, IssueParser.new(text).by(m.user.nick).to_hash) }
     m.reply "created issue #{issue.number} - #{issue.html_url}"
   rescue Github::Error::UnprocessableEntity => e
     m.user.msg "Creation failed: "  + e.message
   end
 
   def convert(m, number, head, base)
-    pull = Retryable.do { api.pull_requests.create_request nil, nil, :issue => number, :head => head, :base => base }
+    pull = Retryable.do { api.pull_requests.create nil, nil, :issue => number, :head => head, :base => base }
     m.reply "Simba, there is a new pull request! #{pull.html_url}"
   rescue Github::Error::UnprocessableEntity => e
     m.user.msg "Converting failed: "  + e.message
   end
 
   def issue(m, number)
-    if issue = Retryable.do { api.issues.issue(api.user, api.repo, number) }
+    if issue = Retryable.do { api.issues.get(api.user, api.repo, number) }
       m.reply "#{issue.html_url} - #{issue.title}"
     end
   rescue Github::Error::UnprocessableEntity => e
@@ -47,16 +47,16 @@ class Issues
   end
 
   def comment(m, number, message)
-    Retryable.do { api.issues.create_comment(api.user, api.repo, number, "body" => message)}
+    Retryable.do { api.issues.comments.create(api.user, api.repo, number, "body" => message)}
   rescue Github::Error::ResourceNotFound
     m.user.msg "sorry, but an error occurred while posting your comment"
   end
 
   # this method is used by the hudson plugin to figure out if a branch matches a pull request
   def pull_request(m, branch_name)
-     pulls = Retryable.do { api.pull_requests.pull_requests(api.user, api.repo)}
+     pulls = Retryable.do { api.pull_requests.list(api.user, api.repo)}
      pulls.detect do |pr|
-       full_pr = Retryable.do { api.pull_requests.pull_request(api.user, api.repo, pr["number"]) }
+       full_pr = Retryable.do { api.pull_requests.get(api.user, api.repo, pr["number"]) }
        return full_pr if full_pr["head"]["ref"] == branch_name
      end
      nil
