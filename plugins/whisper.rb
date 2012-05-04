@@ -1,9 +1,9 @@
 class Whisper
   include October::Plugin
 
-  react_on :private
+  self.react_on = :private
 
-  prefix ''
+  self.prefix = ''
 
   match /!whisper (.+)$/, method: :whisper
   match /(.+)$/, method: :queue
