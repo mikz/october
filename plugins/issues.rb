@@ -32,7 +32,7 @@ class Issues
   end
 
   def issue(m, number)
-    if issue = Retryable.do { api.issues.get(api.user, api.repo, number) }
+    if issue = Retryable.do { api.issues.find(api.user, api.repo, number) }
       m.reply "#{issue.html_url} - #{issue.title}"
     end
   rescue Github::Error::UnprocessableEntity => e
@@ -56,7 +56,7 @@ class Issues
   def pull_request(m, branch_name)
      pulls = Retryable.do { api.pull_requests.list(api.user, api.repo)}
      pulls.detect do |pr|
-       full_pr = Retryable.do { api.pull_requests.get(api.user, api.repo, pr["number"]) }
+       full_pr = Retryable.do { api.pull_requests.find(api.user, api.repo, pr["number"]) }
        return full_pr if full_pr["head"]["ref"] == branch_name
      end
      nil
