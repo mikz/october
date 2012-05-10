@@ -1,11 +1,11 @@
 class Service
   include October::Plugin
-  register_help 'guys', 'focuses all users in channel'
+  register_help 'guys [msg]', 'focuses all users in channel'
 
-   match 'guys', method: :guys
+   match /guys(\s+.+?)?$/, method: :guys
 
-   def guys m
+   def guys(m, msg)
      users = m.channel.users.keys.reject{|u| u == bot }
-     m.reply users.join(', ')
+     m.reply [users.join(', '), msg].compact.join(':')
    end
 end
