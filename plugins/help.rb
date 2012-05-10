@@ -4,8 +4,8 @@ class Help
 
    match 'help', method: :help
 
-   def help m
-     m.reply 'October help:'
-     m.reply self.class.list_help
+   def help(m)
+     m.user.msg 'October help:'
+     m.user.msg self.class.list_help
    end
 end
