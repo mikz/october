@@ -1,6 +1,6 @@
 class Hudson
    class Fetcher < Typhoeus::Request
-    BASE_URL = "http://localhost:8080/"
+    BASE_URL = "http://localhost:8080"
     JOB_URL = "/job/<project>/<test_run>/consoleText"
 
     attr_reader :test_run

@@ -6,6 +6,7 @@ class Hudson
   autoload :Fetcher, 'hudson/fetcher'
   autoload :Reporter, 'hudson/reporter'
   autoload :TestRun, 'hudson/test_run'
+  autoload :Config, 'hudson/config'
 
   HYDRA = Typhoeus::Hydra.new
 
@@ -16,6 +17,7 @@ class Hudson
   match /#{FAILED} #{JOB}#{BUILD}$/, method: :failures
   match /(?:failures|failed|f) #{JOB}#{BUILD} diff #{JOB}#{BUILD}$/, method: :diff
   match /Project (.+?) build #(\d+): (?:SUCCESS|FIXED) (?:.+?): (.*)$/, method: :green, :use_prefix => false
+  match /(?:job) (.*)$/, method: :update_branch
 
   register_help 'failures|failed|f project', 'list failed tests (cukes and test units) from last test run'
   register_help 'failures|failed|f project/test_number', 'list failed tests from specific test run'
@@ -44,5 +46,13 @@ class Hudson
       pull = issues.pull_request(m, tr.branch)
       issues.comment(m, pull["number"], "Green: #{url}") if pull
     end
+  end
+
+  def update_branch(m, new_branch)
+    config = Config.new(m.user.to_s)
+    config.update_branch(new_branch)
+    m.reply "Job updated"
+  rescue
+    m.reply "Error updating job"
   end
 end

@@ -27,6 +27,7 @@ gem 'github_api'
 
 gem 'json'
 gem 'nokogiri'
+gem 'curb'
 
 group :test do
   gem 'rspec'
