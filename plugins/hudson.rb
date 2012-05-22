@@ -17,7 +17,7 @@ class Hudson
   match /#{FAILED} #{JOB}#{BUILD}$/, method: :failures
   match /(?:failures|failed|f) #{JOB}#{BUILD} diff #{JOB}#{BUILD}$/, method: :diff
   match /Project (.+?) build #(\d+): (?:SUCCESS|FIXED) (?:.+?): (.*)$/, method: :green, :use_prefix => false
-  match /(?:job) #{JOB} (.*)$/, method: :update_branch
+  match /(?:job) (.*)$/, method: :update_branch
 
   register_help 'failures|failed|f project', 'list failed tests (cukes and test units) from last test run'
   register_help 'failures|failed|f project/test_number', 'list failed tests from specific test run'
@@ -48,8 +48,8 @@ class Hudson
     end
   end
 
-  def update_branch(m, project_name, new_branch)
-    config = Config.new(project_name)
+  def update_branch(m, new_branch)
+    config = Config.new(m.user.to_s)
     config.update_branch(new_branch)
     m.reply "Job updated"
   rescue
