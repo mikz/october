@@ -18,10 +18,13 @@ class Hudson
   match /(?:failures|failed|f) #{JOB}#{BUILD} diff #{JOB}#{BUILD}$/, method: :diff
   match /Project (.+?) build #(\d+): (?:SUCCESS|FIXED) (?:.+?): (.*)$/, method: :green, :use_prefix => false
   match /(?:job) (.*)$/, method: :update_branch
+  match /(?:build)$/, method: :build
 
   register_help 'failures|failed|f project', 'list failed tests (cukes and test units) from last test run'
   register_help 'failures|failed|f project/test_number', 'list failed tests from specific test run'
   register_help 'failures|failed|f project/test_number diff another/test', 'list only difference between these two tests'
+  register_help 'build', 'builds your personal project in jenkins/hudson'
+  register_help 'job branch_name', 'updates your personal jenkins/hudson to build the given branch' 
 
   def failures(m, project, test_run = nil)
     test = TestRun.new project, test_run
@@ -54,5 +57,13 @@ class Hudson
     m.reply "Job updated"
   rescue
     m.reply "Error updating job"
+  end
+
+  def build(m)
+    config = Config.new(m.user.to_s)
+    config.build
+    m.reply "Builed scheduled"
+  rescue
+    m.reply "Failed to schedule the build"
   end
 end

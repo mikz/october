@@ -3,6 +3,7 @@ require 'open-uri'
 class Hudson
   class Config
     BASE_URL = "http://localhost:8080"
+    BUILD_URL = "/job/<project>/build"
     CONFIG_URL = "/job/<project>/config.xml"
 
     attr_reader :job
@@ -15,8 +16,16 @@ class Hudson
       (BASE_URL + CONFIG_URL).gsub('<project>', job)
     end
 
+    def build_url
+      (BASE_URL + BUILD_URL).gsub('<project>', job)
+   end
+
     def config
       @config ||= Nokogiri::XML(open(config_url))
+    end
+
+    def build
+      open(build_url)
     end
 
     def update_branch(branch_name)
