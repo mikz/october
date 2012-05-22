@@ -11,11 +11,12 @@ class Hudson
   HYDRA = Typhoeus::Hydra.new
 
   FAILED = /(?:failures|failed|f)/
-  BUILD = /(?:\/(\d+))?/
+  NUMBER = /(?:\/(\d+))?/
   JOB = /([\w\-\.]+?)/
+  BUILD = /#{JOB}#{NUMBER}/
 
-  match /#{FAILED} #{JOB}#{BUILD}$/, method: :failures
-  match /(?:failures|failed|f) #{JOB}#{BUILD} diff #{JOB}#{BUILD}$/, method: :diff
+  match /#{FAILED}(?:\s+#{BUILD})?$/, method: :failures
+  match /(?:failures|failed|f) #{BUILD} diff #{BUILD}$/, method: :diff
   match /Project (.+?) build #(\d+): (?:SUCCESS|FIXED) (?:.+?): (.*)$/, method: :green, :use_prefix => false
   match /(?:job) (.*)$/, method: :update_branch
 
@@ -23,8 +24,9 @@ class Hudson
   register_help 'failures|failed|f project/test_number', 'list failed tests from specific test run'
   register_help 'failures|failed|f project/test_number diff another/test', 'list only difference between these two tests'
 
-  def failures(m, project, test_run = nil)
-    test = TestRun.new project, test_run
+  def failures(m, job = nil, test_run = nil)
+    job ||= m.user
+    test = TestRun.new job, test_run
     reporter = Reporter.new test
 
     reporter.respond :report, m
