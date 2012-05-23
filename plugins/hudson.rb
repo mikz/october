@@ -18,8 +18,8 @@ class Hudson
   match /#{FAILED}(?:\s+#{BUILD})?$/, method: :failures
   match /(?:failures|failed|f) #{BUILD} diff #{BUILD}$/, method: :diff
   match /Project (.+?) build #(\d+): (?:SUCCESS|FIXED) (?:.+?): (.*)$/, method: :green, :use_prefix => false
-  match /(?:job) (\S*)(?: ?)(.*?)$/, method: :update_branch
-  match /(?:build)(?: ?)(.*?)$/, method: :build
+  match /(?:job|j) (\S*)(?: ?)(.*?)$/, method: :update_branch
+  match /(?:build|b)(?: ?)(.*?)$/, method: :build
 
   register_help 'failures|failed|f project', 'list failed tests (cukes and test units) from last test run'
   register_help 'failures|failed|f project/test_number', 'list failed tests from specific test run'
