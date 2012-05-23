@@ -18,14 +18,14 @@ class Hudson
   match /#{FAILED}(?:\s+#{BUILD})?$/, method: :failures
   match /(?:failures|failed|f) #{BUILD} diff #{BUILD}$/, method: :diff
   match /Project (.+?) build #(\d+): (?:SUCCESS|FIXED) (?:.+?): (.*)$/, method: :green, :use_prefix => false
-  match /(?:job) (.*)$/, method: :update_branch
-  match /(?:build)$/, method: :build
+  match /(?:job) (\S*)(?: ?)(.*?)$/, method: :update_branch
+  match /(?:build)(?: ?)(.*?)$/, method: :build
 
   register_help 'failures|failed|f project', 'list failed tests (cukes and test units) from last test run'
   register_help 'failures|failed|f project/test_number', 'list failed tests from specific test run'
   register_help 'failures|failed|f project/test_number diff another/test', 'list only difference between these two tests'
-  register_help 'build', 'builds your personal project in jenkins/hudson'
-  register_help 'job branch_name', 'updates your personal jenkins/hudson to build the given branch' 
+  register_help 'build [job_name]', 'builds your personal project or the given job'
+  register_help 'job branch_name [job_name]', 'updates your personal project or the specified job to build the given branch' 
 
   def failures(m, job = nil, test_run = nil)
     job ||= m.user
@@ -53,18 +53,20 @@ class Hudson
     end
   end
 
-  def update_branch(m, new_branch)
-    config = Config.new(m.user.to_s)
+  def update_branch(m, new_branch, job_name)
+    job_name = m.user.to_s if job_name.blank?
+    config = Config.new(job_name)
     config.update_branch(new_branch)
     m.reply "Job updated"
   rescue
     m.reply "Error updating job"
   end
 
-  def build(m)
-    config = Config.new(m.user.to_s)
+  def build(m, job_name)
+    job_name = m.user.to_s if job_name.blank?
+    config = Config.new(job_name)
     config.build
-    m.reply "Builed scheduled"
+    m.reply "Build scheduled"
   rescue
     m.reply "Failed to schedule the build"
   end
