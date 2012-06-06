@@ -10,16 +10,25 @@ class Issues
   register_help 'issue create title | assign: someone', 'create assigned issue'
   register_help 'issue create title | assign: someone | body | milestone: 3', 'combined approach to create issue'
   register_help 'issue convert number head => base', 'convert issue to pull request'
+  register_help 'pull head => base', 'creates a new pull request'
 
   GIT = /[a-z0-9]{7}|[a-z0-9]{40}/
   match /create (.+)$/, method: :create
   match /convert (\d+) (.+?)\s*=>\s*(.+)$/, method: :convert
   match /(?:issue\s+)?#(\d+)/, method: :issue, use_prefix: false
   match /commit ([a-z0-9]{7}|[a-z0-9]{40})(?:[^a-z0-9]|$)/, method: :commit, use_prefix: false
+  match /pull (.+?)\s*=>\s*(.+)$/, method: :pull, use_prefix: false
 
   def create(m, text)
     issue = Retryable.do { api.issues.create(nil, nil, IssueParser.new(text).by(m.user.nick).to_hash) }
     m.reply "created issue #{issue.number} - #{issue.html_url}"
+  rescue Github::Error::UnprocessableEntity => e
+    m.user.msg "Creation failed: "  + e.message
+  end
+
+  def pull(m, head, base)
+    pull = Retryable.do { api.pull_requests.create(nil, nil, :head => head, :base => base, :title => head) }
+    m.reply "Simba, there is a new pull request! #{pull.html_url}"
   rescue Github::Error::UnprocessableEntity => e
     m.user.msg "Creation failed: "  + e.message
   end
