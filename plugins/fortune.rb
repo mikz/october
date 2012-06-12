@@ -8,6 +8,6 @@ class Fortune
   register_help 'fortune', 'fortune YO!'
   def fortune(m)
     response = Typhoeus::Request.get "http://www.fortunefortoday.com/getfortuneonly.php"
-    m.reply response.body
+    m.reply response.body.strip
   end
 end
