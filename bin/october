@@ -1,33 +1,8 @@
 #!/usr/bin/env ruby
 
-@root = File.expand_path("..", File.dirname(__FILE__))
+root = File.expand_path("..", File.dirname(__FILE__))
 
-def child
-  @child
-end
+# this could be just 'october/daemon' when october will be rubygem
+require File.expand_path(File.join('lib', 'october', 'daemon'), root)
 
-def spawn!
-  @child = fork do
-    ENV['OCTOBER_ENV'] = ARGV.shift
-
-    require File.join(@root, "boot")
-    require 'october'
-
-    @bot = October::Base.new
-    @bot.start
-  end
-end
-
-loop do
-  begin
-    Process.wait(spawn!)
-    puts "process #{child} ended"
-  rescue Errno::ECHILD
-    puts "process #{child} died or was killed"
-  end
-
-  puts "spawning new one in next iteration"
-
-  sleep(1) # throttle spawning in case anything fails
-end
-
+October::Daemon.new(root, ARGV.shift).loop!

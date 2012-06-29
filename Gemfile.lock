@@ -6,7 +6,7 @@ GEM
       multi_json (~> 1.0)
     addressable (2.2.8)
     awesome_print (1.0.2)
-    cinch (2.0.2)
+    cinch (2.0.3)
     coderay (1.0.6)
     curb (0.8.0)
     diff-lcs (1.1.3)

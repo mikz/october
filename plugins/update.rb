@@ -14,7 +14,11 @@ class Update
     m.reply "starting selfupdate..."
     `git fetch origin`
     `git reset --hard origin/master`
-    m.reply "selfupdate completed!"
+    m.reply "installing gems..."
+    `bundle install`
+    m.reply "done!"
+
+    seppuku(m)
   end
 
   def seppuku(m)
@@ -48,7 +52,7 @@ class Update
         end
       end
       unless t.join(10)
-        Process.kill('KILL', pid) 
+        Process.kill('KILL', pid)
         m.reply "process #{pid} killed beause of reading timeout (10s)"
       else
         m.reply "process #{pid} ended"
