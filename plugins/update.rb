@@ -11,12 +11,14 @@ class Update
   $SPAWNS = []
 
   def selfupdate(m)
-    m.reply "starting selfupdate..."
+    m.user.msg "starting selfupdate..."
     `git fetch origin`
     `git reset --hard origin/master`
-    m.reply "installing gems..."
+    m.user.msg "installing gems..."
     `bundle install`
-    m.reply "done!"
+    m.user.msg "done!"
+
+    sleep(2)
 
     seppuku(m)
   end
