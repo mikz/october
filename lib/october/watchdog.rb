@@ -1,5 +1,5 @@
 module October
-  class Daemon
+  class Watchdog
     attr_reader :child, :root, :env
 
     def initialize(root, env = nil)
