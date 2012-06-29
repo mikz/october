@@ -14,8 +14,7 @@ module October
         require File.join(root, "boot")
         require 'october'
 
-        @bot = October::Base.new
-        @bot.start
+        October::Base.start
       end
     end
 

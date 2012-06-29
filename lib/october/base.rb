@@ -2,6 +2,11 @@ require 'cinch'
 
 module October
   class Base < Cinch::Bot
+
+    def self.start
+      new.start
+    end
+
     include Config
     include Redis
     include Plugins.initialize
