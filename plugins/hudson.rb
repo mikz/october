@@ -25,7 +25,7 @@ class Hudson
   register_help 'failures|failed|f project/test_number', 'list failed tests from specific test run'
   register_help 'failures|failed|f project/test_number diff another/test', 'list only difference between these two tests'
   register_help 'build [job_name]', 'builds your personal project or the given job'
-  register_help 'job branch_name [job_name]', 'updates your personal project or the specified job to build the given branch' 
+  register_help 'job branch_name [job_name]', 'updates your personal project or the specified job to build the given branch'
 
   def failures(m, job = nil, test_run = nil)
     job ||= m.user
@@ -57,7 +57,7 @@ class Hudson
     job_name = m.user.to_s if job_name.blank?
     config = Config.new(job_name)
     config.update_branch(new_branch)
-    m.reply "Job updated"
+    m.reply "Job '#{job_name}' set to build branch '#{new_branch}'"
   rescue
     m.reply "Error updating job"
   end
@@ -66,8 +66,8 @@ class Hudson
     job_name = m.user.to_s if job_name.blank?
     config = Config.new(job_name)
     config.build
-    m.reply "Build scheduled"
+    m.reply "Build of '#{job_name}' scheduled"
   rescue
-    m.reply "Failed to schedule the build"
+    m.reply "Failed to schedule a build for '#{job_name}'"
   end
 end
