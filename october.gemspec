@@ -8,7 +8,7 @@ Gem::Specification.new do |gem|
   gem.homepage      = "https://github.com/mikz/october"
 
   gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
-  gem.files         = `git ls-files`.split("\n") - %w{.rvmrc .travis.yml Guardfile Gemfile.lock}
+  gem.files         = `git ls-files`.split("\n") - %w{.gitignore .rvmrc .travis.yml Guardfile Gemfile.lock}
   gem.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   gem.name          = "october"
   gem.require_paths = ["lib", "plugins"]

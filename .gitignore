@@ -1,6 +1,9 @@
-config/irc.yml
-config/database.yml
-config/redis.yml
-config/plugins.yml
+/config/irc.yml
+/config/database.yml
+/config/redis.yml
+/config/plugins.yml
+
+/pkg/
 
 .*.swp
+*.rdb

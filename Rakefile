@@ -1,3 +1,7 @@
+namespace :gem do
+  require "bundler/gem_tasks"
+end
+
 task :integrate do |task|
   ENV['OCTOBER_ENV'] ||= 'test'
   exec 'rspec spec'
