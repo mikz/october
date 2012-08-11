@@ -1,5 +1,3 @@
-#require 'boot'
-
 require 'active_support/core_ext'
 
 module October
