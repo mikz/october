@@ -17,7 +17,11 @@ class Hudson
 
   match /#{FAILED}(?:\s+#{BUILD})?$/, method: :failures
   match /(?:failures|failed|f) #{BUILD} diff #{BUILD}$/, method: :diff
+
   match /Project (.+?) build #(\d+): (?:SUCCESS|FIXED) (?:.+?): (.*)$/, method: :green, :use_prefix => false
+  match /Project (.+?) build #(\d+): (?:STILL FAILING|FAILURE) (?:.+?): (.*)$/, method: :red, :use_prefix => false
+  match /Project (.+?) build #(\d+): (?:ABORTED) (?:.+?): (.*)$/, method: :grey, :use_prefix => false
+
   match /(?:job|j) (\S*)(?: ?)(.*?)$/, method: :update_branch
   match /(?:build|b)(?: ?)(.*?)$/, method: :build
 
@@ -45,11 +49,21 @@ class Hudson
   end
 
   def green(m, project_name, build, url)
-    if October::Plugins.registered["Hudson"]
-      tr = TestRun.new(project_name, build)
-      issues = @bot.plugins.detect{|a| a.is_a? Issues}
-      pull = issues.pull_request(m, tr.branch)
-      issues.comment(m, pull["number"], "Green: #{url}") if pull
+    pull_request(project_name, build) do |pull, job|
+      # issues.comment(m, pull["number"], "Green: #{url}")
+      issues.api.repos.statuses.create(nil, nil, job.sha, state: 'success', target_url: url)
+    end
+  end
+
+  def red(m, project_name, build, url)
+    pull_request(project_name, build) do |pull, job|
+      issues.api.repos.statuses.create(nil, nil, job.sha, state: 'failure', target_url: url)
+    end
+  end
+
+  def grey(m, project_name, build, url)
+    pull_request(project_name, build) do |pull, job|
+      issues.api.repos.statuses.create(nil, nil, job.sha, state: 'error', target_url: url)
     end
   end
 
@@ -69,5 +83,20 @@ class Hudson
     m.reply "Build of '#{job_name}' scheduled"
   rescue
     m.reply "Failed to schedule a build for '#{job_name}'"
+  end
+
+  private
+  def issues
+    @bot.plugins.detect{|a| a.is_a? Issues}
+  end
+
+  def pull_request(project_name, build)
+    if October::Plugins.registered["Hudson"]
+      tr = TestRun.new(project_name, build)
+
+      if pull = issues.pull_request(tr.branch)
+        yield pull, tr
+      end
+    end
   end
 end

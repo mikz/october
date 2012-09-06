@@ -69,7 +69,15 @@ class Hudson
     end
 
     def branch
-      log.scan(/Commencing build of Revision (?:.+?) \(origin\/(.+?)\)(.*)/).first.first
+      build[:branch]
+    end
+
+    def build
+      @build_info ||= log.match(/Commencing build of Revision (?<sha>.+?) \(origin\/(?<branch>.+?)\)/)
+    end
+
+    def sha
+      build[:sha]
     end
 
     def all

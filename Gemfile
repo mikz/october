@@ -23,7 +23,7 @@ gem 'redis-objects', :require => 'redis/objects'
 gem 'typhoeus'
 
 # issues stuff - https://github.com/peter-murach/github/
-gem 'github_api'
+gem 'github_api', :git => 'git://github.com/peter-murach/github.git' # unreleased status api
 
 gem 'json'
 gem 'nokogiri'

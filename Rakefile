@@ -32,6 +32,7 @@ end
 
 desc 'Creates interactive console with Pry'
 task :console, [:env] => :boot do |task, args|
+  require 'pry'
   @bot.pry
 end
 
