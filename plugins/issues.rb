@@ -2,6 +2,7 @@ require 'github_api'
 
 class Issues
   include October::Plugin
+  DEFAULT_BASE = :master
 
   self.prefix = /^!issues? /
   register_help 'issue create title', 'create issue'
@@ -17,24 +18,25 @@ class Issues
   match /convert (\d+) (.+?)\s*=>\s*(.+)$/, method: :convert
   match /(?:issue\s+)?#(\d+)/, method: :issue, use_prefix: false
   match /commit ([a-z0-9]{7}|[a-z0-9]{40})(?:[^a-z0-9]|$)/, method: :commit, use_prefix: false
-  match /pull (.+?)\s*=>\s*(.+)$/, method: :pull, use_prefix: false
+  match /pull (.+?)(?:\s*=>\s*(.+))?$/, method: :pull, use_prefix: false
 
   def create(m, text)
-    issue = Retryable.do { api.issues.create(nil, nil, IssueParser.new(text).by(m.user.nick).to_hash) }
+    issue = Retryable.do { api.issues.create(api.user, api.repo, IssueParser.new(text).by(m.user.nick).to_hash) }
     m.reply "created issue #{issue.number} - #{issue.html_url}"
   rescue Github::Error::UnprocessableEntity => e
     m.user.msg "Creation failed: "  + e.message
   end
 
-  def pull(m, head, base)
-    pull = Retryable.do { api.pull_requests.create(nil, nil, :head => head, :base => base, :title => head) }
+  def pull(m, head, base = nil)
+    base ||= DEFAULT_BASE
+    pull = Retryable.do { api.pull_requests.create(api.user, api.repo, :head => head, :base => base, :title => head) }
     m.reply "Simba, there is a new pull request! #{pull.html_url}"
   rescue Github::Error::UnprocessableEntity => e
     m.user.msg "Creation failed: "  + e.message
   end
 
   def convert(m, number, head, base)
-    pull = Retryable.do { api.pull_requests.create nil, nil, :issue => number, :head => head, :base => base }
+    pull = Retryable.do { api.pull_requests.create api.user, api.repo, :issue => number, :head => head, :base => base }
     m.reply "Simba, there is a new pull request! #{pull.html_url}"
   rescue Github::Error::UnprocessableEntity => e
     m.user.msg "Converting failed: "  + e.message
@@ -49,7 +51,7 @@ class Issues
   end
 
   def commit(m, rev)
-    commit = Retryable.do { api.git_data.commit nil, nil, rev }
+    commit = Retryable.do { api.git_data.commit api.user, api.repo, rev }
     m.reply "https://github.com/#{api.user}/#{api.repo}/commit/#{commit.sha} by #{commit.author.name}"
   rescue Github::Error::ResourceNotFound
     m.user.msg "sorry, but commit #{rev} was not found"

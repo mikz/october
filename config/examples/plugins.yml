@@ -1,2 +1,7 @@
 3scale:
   - hudson
+  - issues:
+      user: mikz
+      repo: october
+      adapter: :typhoeus
+      oauth_token: someoauthtoken
