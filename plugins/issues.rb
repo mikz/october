@@ -18,7 +18,7 @@ class Issues
   match /convert (\d+) (.+?)\s*=>\s*(.+)$/, method: :convert
   match /(?:issue\s+)?#(\d+)/, method: :issue, use_prefix: false
   match /commit ([a-z0-9]{7}|[a-z0-9]{40})(?:[^a-z0-9]|$)/, method: :commit, use_prefix: false
-  match /pull (.+?)(?:\s*=>\s*(.+))?$/, method: :pull, use_prefix: false
+  match /\A!pull (.+?)(?:\s*=>\s*(.+))?$/, method: :pull, use_prefix: false
 
   def create(m, text)
     issue = Retryable.do { api.issues.create(api.user, api.repo, IssueParser.new(text).by(m.user.nick).to_hash) }
