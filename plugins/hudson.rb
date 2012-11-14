@@ -51,19 +51,19 @@ class Hudson
   def green(m, project_name, build, url)
     pull_request(project_name, build) do |pull, job|
       # issues.comment(m, pull["number"], "Green: #{url}")
-      issues.api.repos.statuses.create(nil, nil, job.sha, state: 'success', target_url: url)
+      issues.api.repos.statuses.create(api.user, api.repo, job.sha, state: 'success', target_url: url)
     end
   end
 
   def red(m, project_name, build, url)
     pull_request(project_name, build) do |pull, job|
-      issues.api.repos.statuses.create(nil, nil, job.sha, state: 'failure', target_url: url)
+      issues.api.repos.statuses.create(api.user, api.repo, job.sha, state: 'failure', target_url: url)
     end
   end
 
   def grey(m, project_name, build, url)
     pull_request(project_name, build) do |pull, job|
-      issues.api.repos.statuses.create(nil, nil, job.sha, state: 'error', target_url: url)
+      issues.api.repos.statuses.create(api.user, api.repo, job.sha, state: 'error', target_url: url)
     end
   end
 
@@ -87,7 +87,11 @@ class Hudson
 
   private
   def issues
-    @bot.plugins.detect{|a| a.is_a? Issues}
+    @issues ||= @bot.plugins.detect{|a| a.is_a? Issues}
+  end
+
+  def api
+    issues.api
   end
 
   def pull_request(project_name, build)
