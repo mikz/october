@@ -52,18 +52,21 @@ class Hudson
     pull_request(project_name, build) do |pull, job|
       # issues.comment(m, pull["number"], "Green: #{url}")
       issues.api.repos.statuses.create(api.user, api.repo, job.sha, state: 'success', target_url: url)
+      m.reply "#{pull['html_url']} marked as green"
     end
   end
 
   def red(m, project_name, build, url)
     pull_request(project_name, build) do |pull, job|
       issues.api.repos.statuses.create(api.user, api.repo, job.sha, state: 'failure', target_url: url)
+      m.reply "#{pull['html_url']} marked as red"
     end
   end
 
   def grey(m, project_name, build, url)
     pull_request(project_name, build) do |pull, job|
       issues.api.repos.statuses.create(api.user, api.repo, job.sha, state: 'error', target_url: url)
+      m.reply "#{pull['html_url']} marked as grey"
     end
   end
 
