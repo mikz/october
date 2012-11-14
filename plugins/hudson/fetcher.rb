@@ -12,18 +12,17 @@ class Hudson
         gsub('<project>', test_run.project.to_s).
         gsub('<test_run>', test_run.number.to_s)
 
+      user = ENV['HUDSON_USER'].presence
+      pass = ENV['HUDSON_PASS'].presence
+
+      if user or pass
+        options.reverse_merge!(
+          :httpauth => :basic,
+          :userpwd => [user, pass].join(':')
+        )
+      end
+
       super(url, options)
-
-      self.authorize = {
-        :username => ENV['HUDSON_USER'].presence,
-        :password => ENV['HUDSON_PASS'].presence
-      }
-
-    end
-
-    def authorize= options
-      @username = options[:username]
-      @password = options[:password]
     end
 
     def response
