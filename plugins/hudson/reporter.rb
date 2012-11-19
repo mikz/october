@@ -85,7 +85,7 @@ class Hudson
       end
 
       responses{|r| r.code == 0 }.each do |r|
-        message.reply r.curl_error_message
+        message.reply r.status_message
       end
 
       responses{|r| r.code != 200 }.each do |r|

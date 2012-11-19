@@ -11,3 +11,6 @@ Bundler.require :test, :development
 Dir['spec/helpers/**/*.rb'].each do |helper|
   require helper
 end
+
+require 'webmock/rspec'
+WebMock.disable_net_connect!
