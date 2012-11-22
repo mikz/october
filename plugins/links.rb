@@ -5,9 +5,9 @@ class Links
 
   include October::Plugin
 
-  self.prefix = /^!links?(?:\s+)?/
+  self.prefix = /^!links?(?:\s*)/
 
-  match /add\s+(\S+)(?:\s+)?(.+)?$/, method: :add
+  match /add\s+(\S+)(?:\s*)(.*)$/, method: :add
   match /rem(?:ove)?\s+(\d+)$/, method: :remove
   match /list/, method: :list
   match '', method: :list
