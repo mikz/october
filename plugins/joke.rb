@@ -1,10 +1,13 @@
-gem 'typhoeus'
 gem 'json'
 
+require 'httpclient/include_client'
+
 class Joke
+  extend HTTPClient::IncludeClient
+  include_http_client
+
   include October::Plugin
   API_URL = "http://api.icndb.com/jokes/random?firstName=<first_name>&lastName=<last_name>"
-  HYDRA = Typhoeus::Hydra.new
 
   match /joke(?: (\S+)(?: (\S+))?)?$/, method: :joke
 
@@ -24,7 +27,7 @@ class Joke
     url.sub! "<first_name>", first_name.to_s
     url.sub! "<last_name>", last_name.to_s
 
-    response = Typhoeus::Request.get(url)
+    response = self.class.http_client.get(url)
 
     JSON.parse(response.body)
   end
