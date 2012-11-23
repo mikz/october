@@ -19,8 +19,7 @@ gem 'hiredis'
 gem 'redis-namespace'
 gem 'redis-objects', :require => 'redis/objects'
 
-# http stuff
-gem 'typhoeus', :require => 'typhoeus/adapters/faraday'
+gem 'httpclient'
 
 # issues stuff - https://github.com/peter-murach/github/
 gem 'github_api'

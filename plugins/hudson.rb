@@ -1,5 +1,3 @@
-require 'typhoeus'
-
 class Hudson
   include October::Plugin
 
@@ -7,8 +5,6 @@ class Hudson
   autoload :Reporter, 'hudson/reporter'
   autoload :TestRun, 'hudson/test_run'
   autoload :Config, 'hudson/config'
-
-  HYDRA = Typhoeus::Hydra.new
 
   FAILED = /(?:failures|failed|f)/
   NUMBER = /(?:\/(\d+))?/
