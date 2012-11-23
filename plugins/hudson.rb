@@ -29,10 +29,12 @@ class Hudson
 
   def failures(m, job = nil, test_run = nil)
     job ||= m.user
-    test = TestRun.new job, test_run
-    reporter = Reporter.new test
+    test = TestRun.new(job, test_run)
+    reporter = Reporter.new(test)
 
-    reporter.respond :report, m
+    m.user.msg reporter.report
+  rescue Fetcher::HTTPError
+    m.user.msg $!.message
   end
 
   def diff(m, *projects)
@@ -40,8 +42,9 @@ class Hudson
       TestRun.new project, number
     }
     reporter = Reporter.new *tests
-
-    reporter.respond :diff, m
+    m.user.msg reporter.diff
+  rescue Fetcher::HTTPError
+    m.user.msg $!.message
   end
 
   def green(m, project_name, build, url)

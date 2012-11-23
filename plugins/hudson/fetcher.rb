@@ -3,6 +3,13 @@ require 'httpclient/include_client'
 
 class Hudson
   class Fetcher
+    class HTTPError < StandardError
+      def initialize(response)
+        message = "Failed to fetch #{response.http_header.request_uri} status:#{response.status} reason:#{response.reason}"
+        super(message)
+      end
+    end
+
     extend HTTPClient::IncludeClient
     include_http_client do |client|
       user = ENV['HUDSON_USER'].presence
@@ -31,7 +38,11 @@ class Hudson
     end
 
     def response
-      @response ||= self.class.http_client.get(url)
+      @response ||= self.class.http_client.get(url).tap do |response|
+        unless response.ok?
+          raise HTTPError, response
+        end
+      end
     end
   end
 end

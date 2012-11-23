@@ -73,23 +73,5 @@ class Hudson
     def diff
       Diff.new(@tests.first, @tests.last)
     end
-
-    def respond format, message
-
-      if responses.all? &:ok?
-        return message.user.msg self.send(format)
-      end
-
-      responses.each do |response|
-        message.reply "HTTP request failed (#{response.status}) #{response.reason}"
-      end
-    end
-
-    private
-
-    def responses
-      @responses ||= @tests.map(&:response)
-    end
-
   end
 end
