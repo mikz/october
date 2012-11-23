@@ -28,18 +28,10 @@ class Hudson
       @url = (base_url + job_url).
         gsub('<project>', test_run.project.to_s).
         gsub('<test_run>', test_run.number.to_s).freeze
-
-
-      options.reverse_merge! method: :get
-      @connection = self.class.http_client.get_async(url)
-
     end
 
     def response
-      @response ||= begin
-        @connection.async_thread.join
-        @connection.pop
-      end
+      @response ||= self.class.http_client.get(url)
     end
   end
 end
