@@ -76,28 +76,19 @@ class Hudson
 
     def respond format, message
 
-      if responses.all? &:success?
+      if responses.all? &:ok?
         return message.user.msg self.send(format)
       end
 
-      responses(&:timed_out?).each do |r|
-        message.reply 'Some requests timed out :('
+      responses.each do |response|
+        message.reply "HTTP request failed (#{response.status}) #{response.reason}"
       end
-
-      responses{|r| r.code == 0 }.each do |r|
-        message.reply r.status_message
-      end
-
-      responses{|r| r.code != 200 }.each do |r|
-        message.reply "HTTP request failed: #{r.code}"
-      end
-
     end
 
     private
 
-    def responses(&block)
-      @tests.map(&:response).select &block
+    def responses
+      @responses ||= @tests.map(&:response)
     end
 
   end
