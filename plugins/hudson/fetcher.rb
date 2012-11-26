@@ -22,7 +22,7 @@ class Hudson
 
     class_attribute :base_url, :job_url
 
-    self.base_url = "https://hudson.3scale.net"
+    self.base_url = "http://localhost:8080"
     self.job_url  = "/job/<project>/<test_run>/consoleText"
 
     delegate :base_url, :job_url, :to => 'self.class'
