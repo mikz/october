@@ -20,8 +20,10 @@ class Issues
   match /commit ([a-z0-9]{7}|[a-z0-9]{40})(?:[^a-z0-9]|$)/, method: :commit, use_prefix: false
   match /\A!pull (.+?)(?:\s*=>\s*(.+))?$/, method: :pull, use_prefix: false
 
+  match /\A!register(?:\s+(\w+)\s+(\w+))?/, method: :register, use_prefix: false
+
   def create(m, text)
-    issue = Retryable.do { api.issues.create(api.user, api.repo, IssueParser.new(text).by(m.user.nick).to_hash) }
+    issue = Retryable.do { api(m).issues.create(api.user, api.repo, IssueParser.new(text).by(m.user.nick).to_hash) }
     m.reply "created issue #{issue.number} - #{issue.html_url}"
   rescue Github::Error::UnprocessableEntity => e
     m.user.msg "Creation failed: "  + e.message
@@ -36,7 +38,7 @@ class Issues
   end
 
   def convert(m, number, head, base)
-    pull = Retryable.do { api.pull_requests.create api.user, api.repo, :issue => number, :head => head, :base => base }
+    pull = Retryable.do { api(m).pull_requests.create api.user, api.repo, :issue => number, :head => head, :base => base }
     m.reply "Simba, there is a new pull request! #{pull.html_url}"
   rescue Github::Error::UnprocessableEntity => e
     m.user.msg "Converting failed: "  + e.message
@@ -72,11 +74,44 @@ class Issues
     end
   end
 
-  def api
-    @api ||= Github.new(config)
+  def register(m, login = nil, code = nil)
+    if login and code
+      token = api.get_token(code)
+      user = User.new(token: token.token, nick: m.user.nick, login: login)
+      user.save!
+      m.user.msg user.token
+    else
+      m.user.msg api.authorize_url :scope => 'repo'
+    end
+  end
+
+  def api(message = nil)
+    config = send(:config)
+
+    if message and user = User.with(:nick, message.user.nick)
+      config.merge!(oauth_token: user.token)
+    end
+
+    Github.new(config)
   end
 
   private
+
+  class User < Ohm::Model
+    attribute :nick
+    attribute :login
+    attribute :token
+
+    unique :nick
+    unique :login
+    unique :token
+
+    def validate
+      assert_present :nick
+      assert_present :login
+      assert_present :token
+    end
+  end
 
   def config
     self.class.config.symbolize_keys

@@ -18,6 +18,7 @@ gem 'redis'
 gem 'hiredis'
 gem 'redis-namespace'
 gem 'redis-objects', :require => 'redis/objects'
+gem 'ohm'
 
 gem 'httpclient'
 

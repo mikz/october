@@ -7,14 +7,27 @@ module October
     extend Environment
 
     def self.included(base)
-      return unless config = Redis.configuration('redis.yml')
+      base.extend(ClassMethods)
       # FIXME: parhaps more options, fetch from redis directly, or pass them all and let redis to handle it?
-      redis = ::Redis.new config.slice :host, :port, :path
-      if config.has_key? :namespace
-        redis = ::Redis::Namespace.new config[:namespace], :redis => redis
+      redis = ::Redis.new(config)
+      Ohm.connect(config)
+
+      if namespace = config[:namespace]
+        redis = ::Redis::Namespace.new namespace, :redis => redis
       end
       redis.incr 'launches'
       $redis = redis
+    end
+
+    def self.config
+      return unless @@config = Redis.configuration('redis.yml')
+      @@config.slice(:host, :port, :path, :db, :url, :thread_safe)
+    end
+
+    module ClassMethods
+      def redis
+        October::Redis
+      end
     end
   end
 end
