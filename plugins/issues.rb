@@ -12,6 +12,8 @@ class Issues
   register_help 'issue create title | assign: someone | body | milestone: 3', 'combined approach to create issue'
   register_help 'issue convert number head => base', 'convert issue to pull request'
   register_help 'pull head => base', 'creates a new pull request'
+  register_help 'register', 'send you oauth request url'
+  register_help 'register login code', 'gives you token and registers that token in db so it can do stuff as you'
 
   GIT = /[a-z0-9]{7}|[a-z0-9]{40}/
   match /create (.+)$/, method: :create
