@@ -81,10 +81,12 @@ class Issues
       token = api.get_token(code)
       user = User.new(token: token.token, nick: m.user.nick, login: login)
       user.save!
-      m.user.msg user.token
+      m.user.msg "successfuly registered token: #{user.token}"
     else
       m.user.msg api.authorize_url :scope => 'repo'
     end
+  rescue OAuth2::Error
+    m.user.msg "provided code is invalid"
   end
 
   def api(message = nil)
