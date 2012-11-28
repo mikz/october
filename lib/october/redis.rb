@@ -8,6 +8,9 @@ module October
 
     def self.included(base)
       base.extend(ClassMethods)
+
+      return unless config
+
       # FIXME: parhaps more options, fetch from redis directly, or pass them all and let redis to handle it?
       redis = ::Redis.new(config)
       Ohm.connect(config)

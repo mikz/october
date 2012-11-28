@@ -14,3 +14,6 @@ end
 
 require 'webmock/rspec'
 WebMock.disable_net_connect!
+
+FakeFS.activate!
+FakeFS::FileSystem.clear

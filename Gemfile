@@ -2,8 +2,8 @@ source :rubygems
 
 gem 'cinch'
 
-gem 'rake', :require => false
-gem 'activesupport', :require => 'active_support/core_ext'
+gem 'rake', require: false
+gem 'activesupport', require: 'active_support/core_ext'
 gem 'i18n'
 
 # debugging
@@ -17,7 +17,7 @@ end
 gem 'redis'
 gem 'hiredis'
 gem 'redis-namespace'
-gem 'redis-objects', :require => 'redis/objects'
+gem 'redis-objects', require: 'redis/objects'
 gem 'ohm'
 
 gem 'httpclient'
@@ -31,6 +31,6 @@ gem 'curb'
 
 group :test do
   gem 'rspec'
-  gem 'fakefs', :require => 'fakefs/safe'
-  gem 'webmock', :require => false
+  gem 'fakefs', require: 'fakefs/safe'
+  gem 'webmock', require: false
 end
