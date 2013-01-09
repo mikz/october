@@ -5,6 +5,6 @@ class Say
 
   register_help 'say', 'say stuff as october.'
   def say(m, text)
-    m.reply text
+    m.reply text.lstrip
   end
 end
