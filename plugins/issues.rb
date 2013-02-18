@@ -17,7 +17,7 @@ class Issues
 
   GIT = /[a-z0-9]{7}|[a-z0-9]{40}/
   match /create (.+)$/, method: :create
-  match /convert (\d+) (.+?)\s*=>\s*(.+)$/, method: :convert
+  match /convert (\d+) (.+?)(?:\s*=>\s*(.+))?$/, method: :convert
   match /(?:issue\s+)?#(\d+)/, method: :issue, use_prefix: false
   match /commit ([a-z0-9]{7}|[a-z0-9]{40})(?:[^a-z0-9]|$)/, method: :commit, use_prefix: false
   match /\A!pull (.+?)(?:\s*=>\s*(.+))?$/, method: :pull, use_prefix: false
@@ -39,7 +39,8 @@ class Issues
     m.user.msg "Creation failed: "  + e.message
   end
 
-  def convert(m, number, head, base)
+  def convert(m, number, head, base = nil)
+    base ||= DEFAULT_BASE
     pull = Retryable.do { api(m).pull_requests.create api.user, api.repo, :issue => number, :head => head, :base => base }
     m.reply "Simba, there is a new pull request! #{pull.html_url}"
   rescue Github::Error::UnprocessableEntity => e
