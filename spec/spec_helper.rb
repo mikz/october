@@ -17,3 +17,4 @@ WebMock.disable_net_connect!
 
 FakeFS.activate!
 FakeFS::FileSystem.clear
+FakeFS::FileSystem.clone('spec')

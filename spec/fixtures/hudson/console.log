@@ -35,3 +35,33 @@ NoMethodError: undefined method `account=' for #<Connector:0x23304350>
     shoulda (2.11.3) lib/shoulda/context.rb:382:in `call'
     shoulda (2.11.3) lib/shoulda/context.rb:382:in `test: Connector should require account to be set. '
 
+
+75 steps (75 passed)
+1m8.396s
+.................
+(::) failed steps (::)
+
+expected there to be content "There were some errors" in "Help Tours API Active Docs Support Portal Contact Support Dashboard Account Site Logout foo.example.com Dashboard Accounts Applications Finance Monitoring API CMS Settings Accounts Account Plans Groups Export | Deleted Accounts Accounts Bulk operations You have selected 1 accounts and you can make following operations with them: Send emailSend email to selected accounts Change account planTransfer these accounts to different account plan Change stateApprove, reject or make pending selected accounts State Group/Org. Admin Country Plan Apps Signup Date Create Approved bob bob Spain Bronze 0 5 Mar, 2013 Edit Delete Approved jane jane Spain Bronze 0 5 Mar, 2013 Edit Delete Approved mike mike Spain Bronze 0 5 Mar, 2013 Edit Delete Support Privacy Refunds Action completed successfuly close" (RSpec::Expectations::ExpectationNotMetError)
+./features/step_definitions/web_steps.rb:119:in `block (2 levels) in <top (required)>'
+./features/step_definitions/web_steps.rb:14:in `with_scope'
+./features/step_definitions/web_steps.rb:117:in `/^(?:|I )should see "([^"]*)"(?: within "([^"]*)")?$/'
+features/accounts/bulk_operations/change_plans.feature:45:in `Then I should see "There were some errors"'
+
+Failing Scenarios:
+cucumber features/accounts/bulk_operations/change_plans.feature:34 # Scenario: Cant change plan to the same
+
+18 scenarios (1 failed, 17 passed)
+254 steps (1 failed, 253 passed)
+
+
+  5) Error:
+test_create_dupe_end_user(Admin::Api::EndUsersTest):
+ActionView::MissingTemplate: Missing template admin/api/services/end_users/create, admin/api/services/base/create, admin/api/base/create, application/create with {:locale=>[:en], :formats=>[:xml], :handlers=>[:erb, :builder, :coffee, :liquid]}. Searched in:
+  * "/var/lib/jenkins/jobs/michal/workspace/app/views"
+
+    /var/lib/jenkins/.rvm/gems/ruby-1.9.3-p374-railsexpress/gems/actionpack-3.2.12/lib/action_view/path_set.rb:58:in `find'
+    /var/lib/jenkins/.rvm/gems/ruby-1.9.3-p374-railsexpress/gems/actionpack-3.2.12/lib/action_view/lookup_context.rb:109:in `find'
+    /var/lib/jenkins/.rvm/gems/ruby-1.9.3-p374-railsexpress/gems/activesupport-3.2.12/lib/active_support/callbacks.rb:405:in `__run_callback'
+    /var/lib/jenkins/.rvm/gems/ruby-1.9.3-p374-railsexpress/gems/actionpack-3.2.12/lib/action_dispatch/testing/integration.rb:333:in `block (2 levels) in <module:Runner>'
+    /var/lib/jenkins/jobs/michal/workspace/test/integration/user-management-api/end_users_test.rb:70:in `block in <class:EndUsersTest>'
+

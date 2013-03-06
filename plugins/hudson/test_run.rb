@@ -2,7 +2,7 @@ class Hudson
   class TestRun
 
     class Cucumber
-      PATTERN = /^cucumber (?:.+?\/)(features\/.+?\.feature:\d+)/
+      PATTERN = /^cucumber (?:.+?\/)?(features\/.+?\.feature:\d+)/
 
       def self.parse(log)
         log.scan(PATTERN).flatten.uniq.map{ |name| self.new(name) }
@@ -56,8 +56,10 @@ class Hudson
     def initialize(project, number = nil)
       @project = project
       @number = number.presence || 'lastBuild'
+    end
 
-      @fetcher = Fetcher.new self
+    def fetcher
+      @fetcher = Fetcher.new(self)
     end
 
     def cucumbers
@@ -86,7 +88,7 @@ class Hudson
 
     alias :failures :all
 
-    delegate :response, :to => :@fetcher
+    delegate :response, :to => :fetcher
 
     def log
       response.body
