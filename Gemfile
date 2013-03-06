@@ -1,4 +1,4 @@
-source :rubygems
+source 'https://rubygems.org'
 
 gem 'cinch'
 
@@ -9,7 +9,7 @@ gem 'i18n'
 # debugging
 group :development do
   gem 'pry'
-  gem 'pry-nav'
+  gem 'pry-debugger'
   gem 'awesome_print'
 end
 
