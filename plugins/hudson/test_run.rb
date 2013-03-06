@@ -2,7 +2,7 @@ class Hudson
   class TestRun
 
     class Cucumber
-      PATTERN = /^cucumber (?:.+?\/)?(features\/.+?\.feature:\d+)/
+      PATTERN = /^cucumber (?:-p .+?+\s)?(?:.+?\/)?(features\/.+?\.feature:\d+)/
 
       def self.parse(log)
         log.scan(PATTERN).flatten.uniq.map{ |name| self.new(name) }

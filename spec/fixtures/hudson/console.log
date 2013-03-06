@@ -48,7 +48,7 @@ expected there to be content "There were some errors" in "Help Tours API Active 
 features/accounts/bulk_operations/change_plans.feature:45:in `Then I should see "There were some errors"'
 
 Failing Scenarios:
-cucumber features/accounts/bulk_operations/change_plans.feature:34 # Scenario: Cant change plan to the same
+cucumber -p parallel features/accounts/bulk_operations/change_plans.feature:34 # Scenario: Cant change plan to the same
 
 18 scenarios (1 failed, 17 passed)
 254 steps (1 failed, 253 passed)
