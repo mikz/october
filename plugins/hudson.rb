@@ -89,7 +89,9 @@ class Hudson
     m.reply "Failed to schedule a build for '#{job_name}'"
   end
 
-  def update_and_build(m, new_branch, job_name = m.user.to_s)
+  def update_and_build(m, new_branch, job_name)
+    job_name = m.user.to_s if job_name.blank?
+
     config = Config.new(job_name)
     config.update_branch(new_branch)
     config.build
