@@ -21,7 +21,7 @@ class Hudson
   match /(?:job|j) (\S*)(?: ?)(.*?)$/, method: :update_branch
   match /(?:build|b)(?: ?)(.*?)$/, method: :build
 
-  match /jb\s+(.+?)$/, method: :update_and_build
+  match /jb\s+(\S+)(?:\s+(\S+)?)?$/, method: :update_and_build
 
   register_help 'failures|failed|f project', 'list failed tests (cukes and test units) from last test run'
   register_help 'failures|failed|f project/test_number', 'list failed tests from specific test run'
@@ -89,9 +89,7 @@ class Hudson
     m.reply "Failed to schedule a build for '#{job_name}'"
   end
 
-  def update_and_build(m, new_branch)
-    job_name = m.user.to_s
-
+  def update_and_build(m, new_branch, job_name = m.user.to_s)
     config = Config.new(job_name)
     config.update_branch(new_branch)
     config.build
