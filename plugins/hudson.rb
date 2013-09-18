@@ -5,6 +5,7 @@ class Hudson
   autoload :Reporter, 'hudson/reporter'
   autoload :TestRun, 'hudson/test_run'
   autoload :Config, 'hudson/config'
+  autoload :Project, 'hudson/project'
 
   FAILED = /(?:failures|failed|f)/
   NUMBER = /(?:\/(\d+))?/
@@ -50,23 +51,23 @@ class Hudson
   end
 
   def green(m, project_name, build, url)
-    pull_request(project_name, build) do |pull, job|
-      # issues.comment(m, pull["number"], "Green: #{url}")
-      issues.api.repos.statuses.create(api.user, api.repo, job.sha, state: 'success', target_url: url)
+    pull_request(project_name, build) do |pull, job, repo|
+      issues.api.repos.statuses.create(repo[:owner], repo[:name], job.sha, state: 'success', target_url: url)
       m.reply "#{pull['html_url']} marked as green"
     end
   end
 
   def red(m, project_name, build, url)
-    pull_request(project_name, build) do |pull, job|
-      issues.api.repos.statuses.create(api.user, api.repo, job.sha, state: 'failure', target_url: url)
+    pull_request(project_name, build) do |pull, job, repo|
+
+      issues.api.repos.statuses.create(repo[:owner], repo[:name], job.sha, state: 'failure', target_url: url)
       m.reply "#{pull['html_url']} marked as red"
     end
   end
 
   def grey(m, project_name, build, url)
-    pull_request(project_name, build) do |pull, job|
-      issues.api.repos.statuses.create(api.user, api.repo, job.sha, state: 'error', target_url: url)
+    pull_request(project_name, build) do |pull, job, repo|
+      issues.api.repos.statuses.create(repo[:owner], repo[:name], job.sha, state: 'error', target_url: url)
       m.reply "#{pull['html_url']} marked as grey"
     end
   end
@@ -82,6 +83,7 @@ class Hudson
 
   def build(m, job_name)
     job_name = m.user.to_s if job_name.blank?
+
     config = Config.new(job_name)
     config.build
     m.reply "Build of '#{job_name}' scheduled"
@@ -107,16 +109,24 @@ class Hudson
   end
 
   def api
-    issues.api
+    config = Issues.config.symbolize_keys
+    Github.new(config)
+  end
+
+  def pull_requests(user = api.user, repo = api.repo)
+    Issues::Retryable.do { api.pull_requests.list(user, repo) }
   end
 
   def pull_request(project_name, build)
-    if October::Plugins.registered["Hudson"]
-      tr = TestRun.new(project_name, build)
+    tr = TestRun.new(project_name, build)
 
-      if pull = issues.pull_request(tr.branch)
-        yield pull, tr
-      end
+    project = tr.project
+    pr = pull_requests(project.org, project.repo).find { |pr| pr["head"]["ref"] == tr.branch }
+
+    repo = { name: pr['head']['repo']['name'], owner: pr['head']['repo']['owner']['login'] }
+
+    if pr
+      yield pr, tr, repo
     end
   end
 end

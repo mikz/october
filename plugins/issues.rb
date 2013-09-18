@@ -70,7 +70,7 @@ class Issues
 
   # this method is used by the hudson plugin to figure out if a branch matches a pull request
   def pull_request(branch_name, m = nil)
-     Retryable.do { api.pull_requests.list(api.user, api.repo)}.find { |pr| pr["head"]["ref"] == branch_name }
+     Retryable.do { api.pull_requests.list(api.user, api.repo) }.find { |pr| pr["head"]["ref"] == branch_name }
   rescue Github::Error::ResourceNotFound
     if m
       m.user.msg "sorry, but an error occurred while fetching your pull request"

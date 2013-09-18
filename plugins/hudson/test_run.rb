@@ -51,10 +51,10 @@ class Hudson
     end
 
 
-    attr_reader :project, :number
+    attr_reader :job, :number
 
-    def initialize(project, number = nil)
-      @project = project
+    def initialize(job, number = nil)
+      @job = job
       @number = number.presence || 'lastBuild'
     end
 
@@ -78,6 +78,14 @@ class Hudson
       @build_info ||= log.match(/Commencing build of Revision (?<sha>.+?) \(origin\/(?<branch>.+?)\)/)
     end
 
+    def project_url
+      @project_url ||= config.xpath('//com.coravy.hudson.plugins.github.GithubProjectProperty/projectUrl').text.strip
+    end
+
+    def project
+      @project ||= Hudson::Project.new(project_url)
+    end
+
     def sha
       build[:sha]
     end
@@ -88,7 +96,7 @@ class Hudson
 
     alias :failures :all
 
-    delegate :response, :to => :fetcher
+    delegate :response, :config, :to => :fetcher
 
     def log
       response.body
