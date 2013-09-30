@@ -10,5 +10,10 @@ class Hudson
         @org, @repo = @uri.path.match(/(\w+)\/(\w+)/).captures
       end
     end
+
+
+    def to_s
+      [@org, @repo].compact.join('/')
+    end
   end
 end
