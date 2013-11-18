@@ -12,8 +12,8 @@ class Fortune
   FORTUNE_API = 'http://www.fortunefortoday.com/getfortuneonly.php'
 
   register_help 'fortune', 'fortune YO!'
+  
   def fortune(m)
-    response = self.class.http_client.get(FORTUNE_API)
-    m.reply response.body.strip
+    m.reply `fortune -a`.strip
   end
 end
