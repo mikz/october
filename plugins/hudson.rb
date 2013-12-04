@@ -15,9 +15,9 @@ class Hudson
   match /#{FAILED}(?:\s+#{BUILD})?$/, method: :failures
   match /(?:failures|failed|f) #{BUILD} diff #{BUILD}$/, method: :diff
 
-  match /Project (.+?) build #(\d+): (?:SUCCESS|FIXED) (?:.+?): (.*)$/, method: :green, :use_prefix => false
-  match /Project (.+?) build #(\d+): (?:STILL FAILING|FAILURE) (?:.+?): (.*)$/, method: :red, :use_prefix => false
-  match /Project (.+?) build #(\d+): (?:ABORTED) (?:.+?): (.*)$/, method: :grey, :use_prefix => false
+  match /Project (.+?) build #(\d+):.+(?:SUCCESS|FIXED).+(?:.+?): (.*)$/, method: :green, :use_prefix => false
+  match /Project (.+?) build #(\d+):.+(?:STILL FAILING|FAILURE).+(?:.+?): (.*)$/, method: :red, :use_prefix => false
+  match /Project (.+?) build #(\d+):.+(?:ABORTED).+(?:.+?): (.*)$/, method: :grey, :use_prefix => false
 
   match /(?:job|j) (\S*)(?: ?)(.*?)$/, method: :update_branch
   match /(?:build|b)(?: ?)(.*?)$/, method: :build
