@@ -75,7 +75,7 @@ class Hudson
     end
 
     def build
-      @build_info ||= log.match(/Commencing build of Revision (?<sha>.+?) \(origin\/(?<branch>.+?)\)/)
+      @build_info ||= log.match(/Revision (?<sha>.+?) \(origin\/(?<branch>.+?)\)/)
     end
 
     def project_url
