@@ -1,5 +1,7 @@
 PROJECT = october
 
+start : run
+
 build :
 	docker build -t $(PROJECT) .
 pull :
