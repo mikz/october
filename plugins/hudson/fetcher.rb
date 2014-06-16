@@ -10,27 +10,26 @@ class Hudson
       end
     end
 
+    class_attribute :base_url, :job_url, :config_url
+
+    self.base_url = ENV.fetch('HUDSON_URL') { "http://localhost:8080" }
+
+    self.job_url  = "/job/<job>/<test_run>/consoleText"
+
+    self.config_url = "/job/<job>/config.xml"
+
+    delegate :base_url, :job_url, :config_url, :to => 'self.class'
+
     extend HTTPClient::IncludeClient
     include_http_client do |client|
       user = ENV['HUDSON_USER'].presence
       pass = ENV['HUDSON_PASS'].presence
 
       if user or pass
-        client.set_auth base_url, user, pass
+        client.set_auth(base_url, user, pass)
+        client.www_auth.basic_auth.challenge(base_url)
       end
     end
-
-    class_attribute :base_url, :job_url, :config_url
-
-    self.base_url = "http://localhost:8080"
-    if ENV['HUDSON_USER']
-      self.base_url = "https://hudson.3scale.net"
-    end
-    self.job_url  = "/job/<job>/<test_run>/consoleText"
-
-    self.config_url = "/job/<job>/config.xml"
-
-    delegate :base_url, :job_url, :config_url, :to => 'self.class'
 
     attr_reader :test_run, :url
 
@@ -44,14 +43,14 @@ class Hudson
     end
 
     def response
-      @response ||= self.class.http_client.get(url).tap do |response|
+      @response ||= http_client.get(url).tap do |response|
         verify_response!(response)
       end
     end
 
     def config
       @config ||= begin
-        response = self.class.http_client.get(@config_url)
+        response = http_client.get(@config_url)
         verify_response!(response)
         Nokogiri::XML.parse(response.body)
       end
