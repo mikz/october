@@ -1,3 +1,11 @@
+PATH
+  remote: .
+  specs:
+    october (0.1.1)
+      activesupport
+      cinch (~> 2.1.0)
+      i18n
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -9,7 +17,7 @@ GEM
     byebug (2.7.0)
       columnize (~> 0.3)
       debugger-linecache (~> 1.2)
-    cinch (2.0.3)
+    cinch (2.1.0)
     coderay (1.1.0)
     columnize (0.8.9)
     crack (0.3.1)
@@ -62,7 +70,6 @@ GEM
       byebug (~> 2.7)
       pry (~> 0.9.12)
     rack (1.5.2)
-    rake (10.0.2)
     redis (3.0.2)
     redis-namespace (1.2.1)
       redis (~> 3.0.0)
@@ -89,7 +96,6 @@ PLATFORMS
 DEPENDENCIES
   activesupport
   awesome_print
-  cinch
   curb
   fakefs
   github_api
@@ -98,10 +104,10 @@ DEPENDENCIES
   i18n
   json
   nokogiri
+  october!
   ohm
   pry
   pry-byebug
-  rake
   redis
   redis-namespace
   redis-objects

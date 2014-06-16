@@ -1,5 +1,8 @@
 require 'cinch'
 
+# raise correct exceptions instead of unnamed constant
+Cinch::ModeParser.send(:include, Cinch::Exceptions)
+
 module October
   class Base < Cinch::Bot
 

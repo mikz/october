@@ -1,8 +1,7 @@
 source 'https://rubygems.org'
 
-gem 'cinch'
+gemspec
 
-gem 'rake', require: false
 gem 'activesupport', require: 'active_support/core_ext'
 gem 'i18n'
 
@@ -30,7 +29,5 @@ gem 'nokogiri'
 gem 'curb'
 
 group :test do
-  gem 'rspec'
-  gem 'fakefs', require: 'fakefs/safe'
   gem 'webmock', require: false
 end

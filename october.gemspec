@@ -1,4 +1,7 @@
-require File.expand_path('../lib/october/version', __FILE__)
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+
+require 'october/version'
 
 Gem::Specification.new do |gem|
   gem.authors       = ["Michal Cichra"]
@@ -17,7 +20,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'activesupport'
   gem.add_dependency 'i18n'
 
-  gem.add_dependency 'cinch', '~> 2.0.12'
+  gem.add_dependency 'cinch', '~> 2.1.0'
 
   gem.add_development_dependency 'rspec'
   gem.add_development_dependency 'fakefs'

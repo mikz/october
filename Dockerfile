@@ -6,11 +6,12 @@ RUN apt-get -y -q install fortunes fortunes-mario fortunes-off fortunes-spam for
 
 VOLUME /var/lib/redis/
 
-WORKDIR /tmp/
+WORKDIR /tmp/october/
 
-ADD Gemfile /tmp/
-ADD Gemfile.lock /tmp/
-ADD october.gemspec /tmp/
+ADD Gemfile /tmp/october/
+ADD Gemfile.lock /tmp/october/
+ADD october.gemspec /tmp/october/
+ADD lib/october/version.rb /tmp/october/lib/october/
 
 RUN bundle install --without development test --jobs `grep -c processor /proc/cpuinfo`
 
@@ -20,4 +21,4 @@ ADD . /opt/october/
 # ADD plugins.yml config/irc.yml
 RUN bundle install --without development test
 
-CMD redis-server /etc/redis/redis.conf && rake start[3scale]
+CMD redis-server /etc/redis/redis.conf && bundle exec october
