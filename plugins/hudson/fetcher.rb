@@ -26,8 +26,10 @@ class Hudson
       pass = ENV['HUDSON_PASS'].presence
 
       if user or pass
-        client.set_auth(base_url, user, pass)
-        client.www_auth.basic_auth.challenge(base_url)
+        url = base_url
+
+        client.set_auth(url, user, pass)
+        client.www_auth.basic_auth.challenge(url)
       end
     end
 
