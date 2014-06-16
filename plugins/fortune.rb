@@ -14,6 +14,6 @@ class Fortune
   register_help 'fortune', 'fortune YO!'
   
   def fortune(m)
-    m.reply `fortune -a`.strip
+    m.reply `/usr/games/fortune -a`.strip
   end
 end

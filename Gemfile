@@ -9,7 +9,7 @@ gem 'i18n'
 # debugging
 group :development do
   gem 'pry'
-  gem 'pry-debugger'
+  gem 'pry-byebug'
   gem 'awesome_print'
 end
 
