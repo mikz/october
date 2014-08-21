@@ -48,6 +48,7 @@ class Issues
   end
 
   def issue(m, number)
+    return if m.user.nick == 'github'
     if issue = Retryable.do { api.issues.find(api.user, api.repo, number) }
       m.reply "#{issue.html_url} - #{issue.title}"
     end
