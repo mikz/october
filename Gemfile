@@ -28,6 +28,8 @@ gem 'json'
 gem 'nokogiri'
 gem 'curb'
 
+gem 'sonos'
+
 group :test do
   gem 'webmock', require: false
 end
