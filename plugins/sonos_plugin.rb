@@ -6,18 +6,15 @@ class SonosPlugin
     match operation, method: operation.to_sym
   end
 
+  match /volume(?:\s+(\+|\-)?(\d+))?/, method: :volume
+
   register_help 'status', 'what is current status'
   register_help 'playing', 'what is currently playing'
   register_help 'play', 'play music'
   register_help 'next', 'next song'
   register_help 'pause', 'pause music'
   register_help 'stop', 'stop music'
-
-  GIT = /[a-z0-9]{7}|[a-z0-9]{40}/
-  match /create (.+)$/, method: :create
-  match /say (.+)$/, method: :say
-
-  register_help 'say', 'say stuff as october.'
+  register_help 'volume', 'control volume (+10, -10, 10, nada)'
 
   def initialize(*)
     super
@@ -62,6 +59,23 @@ class SonosPlugin
     m.reply msg
   end
 
+  def volume(m, sign, amount)
+    case sign
+      when '-'
+        master.volume -= amount.to_i
+        m.reply "volume #{sign}#{amount}"
+      when '+'
+        master.volume += amount.to_i
+        m.reply "volume #{sign}#{amount}"
+      else
+        if amount.nil? || amount.empty?
+          m.reply "the volume is: #{master.volume}"
+        else
+          master.volume = amount.to_i
+          m.reply "volume set to #{amount}"
+        end
+    end
+  end
   private
 
   def master
