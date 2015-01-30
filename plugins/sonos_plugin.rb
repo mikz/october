@@ -7,6 +7,7 @@ class SonosPlugin
   end
 
   match /volume(?:\s+(\+|\-)?(\d+))?/, method: :volume
+  match /(?:add)(?: ?)(.*?)$/, method: :add
 
   register_help 'status', 'what is current status'
   register_help 'playing', 'what is currently playing'
@@ -15,6 +16,7 @@ class SonosPlugin
   register_help 'pause', 'pause music'
   register_help 'stop', 'stop music'
   register_help 'volume', 'control volume (+10, -10, 10, nada)'
+  register_help 'add', 'schedule a track (only spotify URI tracks supported)'
 
   def initialize(*)
     super
@@ -44,6 +46,11 @@ class SonosPlugin
   def stop(m)
     master.stop
     m.reply 'sonos stopped'
+  end
+
+  def add(m, id)
+    master.add_spotify_to_queue(id)
+    m.reply 'track added'
   end
 
   def playing(m)
