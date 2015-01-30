@@ -5,3 +5,4 @@ rvm:
   - 2.2
 script: rake integrate
 sudo: false
+cache: bundler
