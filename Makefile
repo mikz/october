@@ -4,10 +4,9 @@ start : run
 
 build :
 	docker build -t $(PROJECT) .
-pull :
-	docker pull quay.io/3scale/ruby:2.0
 
 run :
-	docker run --rm -t -i $(PROJECT) $(CMD)
+	docker run --rm --env OCTOBER_ENV=$(OCTOBER_ENV) --net=host -t -i $(PROJECT) $(CMD)
+
 bash : CMD = bash
 bash : run

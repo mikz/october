@@ -8,17 +8,13 @@ VOLUME /var/lib/redis/
 
 WORKDIR /tmp/october/
 
-ADD Gemfile /tmp/october/
-ADD Gemfile.lock /tmp/october/
-ADD october.gemspec /tmp/october/
+ADD Gemfile Gemfile.lock october.gemspec /tmp/october/
 ADD lib/october/version.rb /tmp/october/lib/october/
 
 RUN bundle install --without development test --jobs `grep -c processor /proc/cpuinfo`
 
 WORKDIR /opt/october/
 ADD . /opt/october/
-# ADD irc.yml config/irc.yml
-# ADD plugins.yml config/irc.yml
 RUN bundle install --without development test
 
 CMD redis-server /etc/redis/redis.conf && bundle exec october
