@@ -5,7 +5,7 @@ module October
     def load_configuration(file)
       config = File.join('config', file)
       return {} unless File.exists?(config)
-      YAML.load_file( config ).with_indifferent_access
+      File.open(config) { |f| Psych.load(f, config) }.with_indifferent_access
     end
 
     def environment

@@ -30,4 +30,5 @@ gem 'curb'
 
 group :test do
   gem 'webmock', require: false
+  gem 'memfs', github: 'simonc/memfs' # not yet released file << io
 end

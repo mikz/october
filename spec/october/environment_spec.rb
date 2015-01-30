@@ -6,8 +6,8 @@ class TestClass
 end
 
 describe TestClass do
- before(:each) { FakeFS.activate! }
- after(:each)  { FakeFS.deactivate! }
+ before(:each) { MemFs.activate! }
+ after(:each)  { MemFs.deactivate! }
 
  let(:file) { 'irc.yml' }
  let(:config) { Dir.mkdir('config'); File.join('config', file) }

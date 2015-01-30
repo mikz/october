@@ -4,7 +4,7 @@ end
 
 task :integrate do |task|
   ENV['OCTOBER_ENV'] ||= 'test'
-  exec 'rspec spec'
+  exec 'rspec'
 end
 
 task :environment, :env do |task, args|

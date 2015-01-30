@@ -15,6 +15,5 @@ end
 require 'webmock/rspec'
 WebMock.disable_net_connect!
 
-FakeFS.activate!
-FakeFS::FileSystem.clear
-FakeFS::FileSystem.clone('spec')
+# temporal hack until https://github.com/simonc/memfs/issues/15 is fixed
+MemFs::File.send(:define_method, :fs) { MemFs::File.send(:fs) }
