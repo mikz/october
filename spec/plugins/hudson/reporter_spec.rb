@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'hudson/reporter'
 
 describe Hudson::Reporter do
-  let(:test) { mock(:test, project: 'name', number: 42, failures: ['first','second']) }
+  let(:test) { double(:test, project: 'name', number: 42, failures: ['first','second']) }
 
   describe "#report" do
     subject(:report) { Hudson::Reporter.new(test).report }
@@ -13,7 +13,7 @@ describe Hudson::Reporter do
   end
 
   describe "#diff" do
-    let(:fifth) { mock(:fifth, project: 'fifth', number: 5, failures: ['second','third']) }
+    let(:fifth) { double(:fifth, project: 'fifth', number: 5, failures: ['second','third']) }
 
     subject(:diff) { Hudson::Reporter.new([test, fifth]).diff }
 
