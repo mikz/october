@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gemspec
+gemspec(development_group: :test)
 
 gem 'activesupport', require: 'active_support/core_ext'
 gem 'i18n'
