@@ -4,5 +4,8 @@ rvm:
   - 2.1
   - 2.2
 script: rake integrate
+env:
+  OCTOBER_ENV: test
 sudo: false
 cache: bundler
+script: rspec
