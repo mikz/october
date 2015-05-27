@@ -20,7 +20,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'activesupport'
   gem.add_dependency 'i18n'
 
-  gem.add_dependency 'cinch', '~> 2.1.0'
+  gem.add_dependency 'cinch', '~> 2.2.2'
 
   gem.add_development_dependency 'rspec', '~> 3.1'
   gem.add_development_dependency 'rspec-its'
