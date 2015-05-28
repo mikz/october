@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require 'october/cli'
+
+October::CLI.start
