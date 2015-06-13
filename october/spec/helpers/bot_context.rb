@@ -1,4 +1,4 @@
-RSpec.shared_context :bot do
+module BotContext
   module TestingIRC
     attr_accessor :queue
   end
@@ -6,10 +6,13 @@ RSpec.shared_context :bot do
   class FakeSocket
 
   end
+end
 
-  let(:irc) { Cinch::IRC.new(bot).extend(TestingIRC) }
+RSpec.shared_context :bot do
+
+  let(:irc) { Cinch::IRC.new(bot).extend(BotContext::TestingIRC) }
   let(:queue) { Cinch::MessageQueue.new(socket, bot) }
-  let(:socket) { FakeSocket.new }
+  let(:socket) { BotContext::FakeSocket.new }
 
   let(:bot) { October::Bot.new }
 

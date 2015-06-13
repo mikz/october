@@ -1,3 +1,5 @@
+require 'october/plugin'
+
 module October
   module Plugin
     class Help

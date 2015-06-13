@@ -1,9 +1,5 @@
 RSpec.describe October::Plugin::Help do
-
-  include_context :bot
-
-  subject(:plugin) { described_class.new(bot) }
-
+  include_context :plugin
 
   def message(msg)
     Cinch::Message.new(":nick!nick@example.com MSG #{msg}", bot)

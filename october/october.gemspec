@@ -26,4 +26,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'cinch', '~> 2.2.5'
   spec.add_dependency 'thor'
+  spec.add_dependency 'rack'
+  spec.add_dependency 'roda', '~> 2.3'
+  spec.add_dependency 'pry'
 end
