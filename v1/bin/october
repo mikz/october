@@ -1,8 +1,0 @@
-#!/usr/bin/env ruby
-
-root = File.expand_path("..", File.dirname(__FILE__))
-
-# this could be just 'october/daemon' when october will be rubygem
-require File.expand_path(File.join('lib', 'october', 'watchdog'), root)
-
-October::Watchdog.new(root, ARGV.shift).loop!

@@ -5,5 +5,4 @@ env:
   OCTOBER_ENV: test
 sudo: false
 cache: bundler
-before_install: cd october
 script: bundle exec rspec
