@@ -11,6 +11,10 @@ module October
         route do |r|
           bot = env['october.bot']
           plugin = env['october.plugin']
+
+
+          response['Content-Type'] = r.content_type
+          request.body.read
         end
 
       end

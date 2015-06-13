@@ -16,6 +16,9 @@ module October
     route do |r|
       bot = env['october.bot'.freeze] = opts[:bot]
 
+      # as the bot might be started after booting the server
+      r.class.refresh_multi_run_regexp!
+
       # TODO: this can be replaced by normal r.multi_run(&block)
       # when https://github.com/jeremyevans/roda/pull/32 is merged
       r.on r.class.multi_run_regexp do |prefix|

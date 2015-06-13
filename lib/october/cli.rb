@@ -12,8 +12,7 @@ module October
     method_option :listen, type: :numeric, default: 8080
 
     def start
-      app = new_app
-      bot = app.bot
+      app, bot = boot
 
       server = Rack::Server.new(app: app, Port: options[:listen])
 
@@ -28,8 +27,8 @@ module October
 
       binding = Pry.toplevel_binding
 
-      app = new_app
-      bot = app.bot
+      app, bot = boot
+
       server = Rack::Server.new(app: app)
 
       binding.receiver.extend(ConsoleMethods)
@@ -43,20 +42,22 @@ module October
       Pry.start(binding, hooks: { before_session: set_sticky_variables })
     end
 
-    desc 'server', 'start web server'
-    def server
-      October::Server.start
-    end
-
-
     private
 
-    def new_app
-      bot = new_bot
+    def boot
 
-      app = October::Server.dup
+      bot = new_bot
+      app = new_app
+
+      puts app.multi_run_apps
+      puts October::Server.multi_run_apps
       app.bot = bot
 
+      [app, bot]
+    end
+
+    def new_app
+      app = October::Server.dup
       app
     end
 
@@ -76,7 +77,8 @@ module October
 
     def configuration
       {
-          port: options[:port]
+          port: options[:port],
+          plugins: { plugins: [ October::Plugin::Github ]}
       }
     end
   end
