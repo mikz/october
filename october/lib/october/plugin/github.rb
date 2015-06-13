@@ -11,9 +11,6 @@ module October
         route do |r|
           bot = env['october.bot']
           plugin = env['october.plugin']
-
-
-
         end
 
       end

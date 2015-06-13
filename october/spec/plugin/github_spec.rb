@@ -6,7 +6,7 @@ RSpec.describe October::Plugin::Github do
   it { is_expected.to be }
 
   it 'has application' do
-    expect(described_class.mounts).to eq('october' => described_class::Server)
+    expect(described_class.mounts).to have_key(described_class.plugin_name)
     expect(described_class)
   end
 end

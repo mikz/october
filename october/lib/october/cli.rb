@@ -9,12 +9,13 @@ module October
 
     desc 'start', 'start irc both and web server'
     method_option :port, type: :numeric, default: 6767
+    method_option :listen, type: :numeric, default: 8080
 
     def start
       app = new_app
       bot = app.bot
 
-      server = Rack::Server.new(app: app)
+      server = Rack::Server.new(app: app, Port: options[:listen])
 
       bot.in_thread { start }
 
@@ -74,7 +75,9 @@ module October
     end
 
     def configuration
-      options.map{|k, v| [k.to_sym, v] }.to_h
+      {
+          port: options[:port]
+      }
     end
   end
 end
