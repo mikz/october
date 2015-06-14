@@ -4,7 +4,7 @@ require 'json'
 
 module October
   module Plugin
-    class Github
+    class GithubWebhooks
       include October::Plugin
 
       class Event < Struct.new(:payload, :name)

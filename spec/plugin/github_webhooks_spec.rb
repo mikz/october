@@ -1,6 +1,6 @@
-require 'october/plugin/github'
+require 'october/plugin/github_webhooks'
 
-RSpec.describe October::Plugin::Github do
+RSpec.describe October::Plugin::GithubWebhooks do
   include_context :plugin
 
   it { is_expected.to be }
@@ -12,7 +12,7 @@ RSpec.describe October::Plugin::Github do
 end
 
 
-RSpec.describe October::Plugin::Github::Server do
+RSpec.describe October::Plugin::GithubWebhooks::Server do
   include_context :rack
   include_context :bot
 
@@ -24,7 +24,7 @@ RSpec.describe October::Plugin::Github::Server do
     let(:webhook) { open('spec/fixtures/webhooks/deployment.json').read }
 
     it 'works' do
-      expect(bot).to receive(:notice).with(an_instance_of(October::Plugin::Github::DeploymentEvent))
+      expect(bot).to receive(:notice).with(an_instance_of(October::Plugin::GithubWebhooks::DeploymentEvent))
       post '/', headers: { 'X-GitHub-Event' => 'deployment' }, params: webhook, env: env
       expect(last_response.body).to eq('{"environment":"october-3scale","creator":"mikz","sha":"c844384ce5d0a2e29cc2a1727182b0dddff074d6"}')
     end
@@ -34,7 +34,7 @@ RSpec.describe October::Plugin::Github::Server do
     let(:webhook) { open('spec/fixtures/webhooks/deployment_status.json').read }
 
     it 'works' do
-      expect(bot).to receive(:notice).with(an_instance_of(October::Plugin::Github::DeploymentStatusEvent))
+      expect(bot).to receive(:notice).with(an_instance_of(October::Plugin::GithubWebhooks::DeploymentStatusEvent))
       post '/', headers: { 'X-GitHub-Event' => 'deployment_status' }, params: webhook, env: env
       expect(last_response.body).to eq('{"environment":"october-3scale","creator":"mikz","sha":"445083e568e2771cdec5e30051ce6cd918ce28bb","state":"success"}')
     end
@@ -45,7 +45,7 @@ RSpec.describe October::Plugin::Github::Server do
     let(:webhook) { open('spec/fixtures/webhooks/pull_request.json').read }
 
     it 'works' do
-      expect(bot).to receive(:notice).with(an_instance_of(October::Plugin::Github::PullRequestEvent))
+      expect(bot).to receive(:notice).with(an_instance_of(October::Plugin::GithubWebhooks::PullRequestEvent))
       post '/', headers: { 'X-GitHub-Event' => 'pull_request' }, params: webhook, env: env
       expect(last_response.body).to eq('{"number":29,"action":"synchronize"}')
     end
@@ -56,7 +56,7 @@ RSpec.describe October::Plugin::Github::Server do
     let(:webhook) { open('spec/fixtures/webhooks/push.json').read }
 
     it 'works' do
-      expect(bot).to receive(:notice).with(an_instance_of(October::Plugin::Github::PushEvent))
+      expect(bot).to receive(:notice).with(an_instance_of(October::Plugin::GithubWebhooks::PushEvent))
       post '/', headers: { 'X-GitHub-Event' => 'push' }, params: webhook, env: env
       expect(last_response.body).to eq('{"ref":"refs/heads/v2","before":"445083e568e2771cdec5e30051ce6cd918ce28bb","after":"c844384ce5d0a2e29cc2a1727182b0dddff074d6"}')
     end
@@ -66,7 +66,7 @@ RSpec.describe October::Plugin::Github::Server do
     let(:webhook) { open('spec/fixtures/webhooks/status.json').read }
 
     it 'works' do
-      expect(bot).to receive(:notice).with(an_instance_of(October::Plugin::Github::StatusEvent))
+      expect(bot).to receive(:notice).with(an_instance_of(October::Plugin::GithubWebhooks::StatusEvent))
       post '/', headers: { 'X-GitHub-Event' => 'status' }, params: webhook, env: env
       expect(last_response.body).to eq('{"context":"continuous-integration/travis-ci/push","state":"pending"}')
     end

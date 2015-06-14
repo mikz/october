@@ -2,7 +2,7 @@ require 'thor'
 
 require 'october'
 
-require 'october/plugin/github'
+require 'october/plugin/github_webhooks'
 
 module October
   class CLI < Thor
