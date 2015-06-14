@@ -4,6 +4,12 @@ module October
   class Bot < ::Cinch::Bot
     include October::Thread
 
+    def initialize(*)
+      super
+      @plugins = October::PluginList.new(self, @plugins)
+      set_nick @config.nick
+    end
+
     def self.available_options
       Cinch::Configuration::Bot::KnownOptions
     end
@@ -11,14 +17,5 @@ module October
     def quit!
       @quitting = true
     end
-
-    module Overrides
-      def initialize(*args, &block)
-        super
-        @plugins = October::PluginList.new(self, @plugins)
-      end
-    end
-
-    prepend Overrides
   end
 end
