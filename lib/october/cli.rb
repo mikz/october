@@ -2,6 +2,7 @@ require 'thor'
 
 require 'october'
 
+require 'october/plugin/github'
 require 'october/plugin/github_webhooks'
 
 module October
@@ -89,7 +90,7 @@ module October
 
       config = available.zip(values).select{ |(_, val)| val }.to_h
 
-      plugins = { plugins: [ October::Plugin::GithubWebhooks ]}
+      plugins = { plugins: [ October::Plugin::GithubWebhooks, October::Plugin::Github ]}
       ssl = { use: config.delete(:ssl) }
 
       shared = config.delete(:config)
