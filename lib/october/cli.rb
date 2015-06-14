@@ -8,7 +8,7 @@ module October
   class CLI < Thor
 
     desc 'start', 'start irc both and web server'
-    method_option :port, type: :numeric, default: 6767
+    method_option :port, type: :numeric, default: 6667
     method_option :listen, type: :numeric, default: 8080
 
     def start

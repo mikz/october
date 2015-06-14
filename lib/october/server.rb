@@ -5,10 +5,12 @@ module October
   class Server < Roda
     plugin :multi_run
 
+    # @param [::October::Bot>] bot
     def self.bot=(bot)
       opts[:bot] = bot
     end
 
+    # @return [nil, ::October::Bot]
     def self.bot
       opts[:bot]
     end
