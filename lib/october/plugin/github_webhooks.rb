@@ -133,9 +133,11 @@ module October
 
           r.post do
             bot = env['october.bot']
+            plugin = env['october.plugin']
+
             event = Event.parse(request)
 
-            bot.notice event
+            plugin.announce(event)
 
             response['Content-Type'] = request.content_type
             event.to_json
@@ -145,6 +147,14 @@ module October
       end
 
       app Server.app
+
+
+      def announce(event)
+        channel = shared['github']
+
+        october = bot.channel_list.find_ensured(channel)
+        october.send event
+      end
     end
   end
 end

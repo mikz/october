@@ -1,4 +1,5 @@
 RSpec.shared_context :plugin do
   include_context :bot
-  subject(:plugin) { described_class.new(bot) }
+  let(:plugin_class) { described_class }
+  subject(:plugin) { plugin_class.new(bot) }
 end

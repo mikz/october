@@ -16,6 +16,7 @@ module October
     method_option :channels, type: :array
     method_option :listen, type: :numeric, default: 8080
     method_option :ssl, type: :boolean, default: false
+    method_option :config, type: :hash
 
     def start
       app, bot = boot
@@ -82,7 +83,7 @@ module October
     end
 
     def configuration
-      available = October::Bot.available_options
+      available = October::Bot.available_options + [:config]
 
       values = options.values_at(*available)
 
@@ -91,7 +92,9 @@ module October
       plugins = { plugins: [ October::Plugin::GithubWebhooks ]}
       ssl = { use: config.delete(:ssl) }
 
-      config.merge(plugins: plugins, ssl: ssl)
+      shared = config.delete(:config)
+
+      config.merge(plugins: plugins, ssl: ssl, shared: shared )
     end
   end
 end
