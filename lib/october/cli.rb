@@ -9,7 +9,13 @@ module October
 
     desc 'start', 'start irc both and web server'
     method_option :port, type: :numeric, default: 6667
+    method_option :server, type: :string, required: true, default: 'localhost'
+    method_option :password, type: :string
+    method_option :nick, type: :string
+    method_option :user, type: :string
+    method_option :channels, type: :array
     method_option :listen, type: :numeric, default: 8080
+    method_option :ssl, type: :boolean, default: false
 
     def start
       app, bot = boot
@@ -33,7 +39,7 @@ module October
 
       binding.receiver.extend(ConsoleMethods)
 
-      set_sticky_variables = -> (output, binding, pry) do
+      set_sticky_variables = -> (_, _, pry) do
         pry.add_sticky_local(:bot) { bot }
         pry.add_sticky_local(:app) { app }
         pry.add_sticky_local(:server) { server }
@@ -76,10 +82,16 @@ module October
     end
 
     def configuration
-      {
-          port: options[:port],
-          plugins: { plugins: [ October::Plugin::Github ]}
-      }
+      available = October::Bot.available_options
+
+      values = options.values_at(*available)
+
+      config = available.zip(values).select{ |(_, val)| val }.to_h
+
+      plugins = { plugins: [ October::Plugin::GithubWebhooks ]}
+      ssl = { use: config.delete(:ssl) }
+
+      config.merge(plugins: plugins, ssl: ssl)
     end
   end
 end

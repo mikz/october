@@ -4,6 +4,10 @@ module October
   class Bot < ::Cinch::Bot
     include October::Thread
 
+    def self.available_options
+      Cinch::Configuration::Bot::KnownOptions
+    end
+
     def quit!
       @quitting = true
     end
