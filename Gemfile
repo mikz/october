@@ -7,3 +7,6 @@ gemspec
 
 
 gem 'codeclimate-test-reporter', group: :test, require: nil
+gem 'slack-ruby-client', github: 'dblock/slack-ruby-client', branch: 'master'
+
+gem 'celluloid-io'

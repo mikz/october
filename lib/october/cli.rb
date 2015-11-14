@@ -9,14 +9,9 @@ module October
   class CLI < Thor
 
     desc 'start', 'start irc both and web server'
-    method_option :port, type: :numeric, default: 6667
-    method_option :server, type: :string, required: true, default: 'localhost'
-    method_option :password, type: :string
-    method_option :nick, type: :string
-    method_option :user, type: :string
+    method_option :token, type: :string, required: true
     method_option :channels, type: :array
     method_option :listen, type: :numeric, default: 8080
-    method_option :ssl, type: :boolean, default: false
     method_option :config, type: :hash
 
     def start
@@ -24,7 +19,7 @@ module October
 
       server = Rack::Server.new(app: app, Port: options[:listen])
 
-      bot.in_thread { start }
+      bot.start
 
       server.start
     end
@@ -70,8 +65,8 @@ module October
     end
 
     def new_bot
-      bot = October::Bot.new
-      bot.config.load(configuration)
+      bot = October::Bot.new(configuration)
+      # bot.config.load(configuration)
       bot
     end
 
@@ -84,18 +79,23 @@ module October
     end
 
     def configuration
-      available = October::Bot.available_options + [:config]
+      available = October::Bot.available_options
 
       values = options.values_at(*available)
 
       config = available.zip(values).select{ |(_, val)| val }.to_h
 
-      plugins = { plugins: [ October::Plugin::GithubWebhooks, October::Plugin::Github ]}
-      ssl = { use: config.delete(:ssl) }
+      plugins = {
+          plugins: [
+              October::Plugin::GithubWebhooks,
+              October::Plugin::Github,
+              October::Plugin::Hello,
+          ]
+      }
 
       shared = config.delete(:config)
 
-      config.merge(plugins: plugins, ssl: ssl, shared: shared )
+      config.merge(plugins: plugins, shared: shared )
     end
   end
 end

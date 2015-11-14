@@ -12,7 +12,6 @@ RSpec.describe October::Plugin do
       Class.new.include(mod)
     end
 
-    it { expect(plugin.ancestors).to include(Cinch::Plugin) }
     it { expect(plugin.ancestors).to include(October::Plugin) }
 
     it 'registers help with description' do

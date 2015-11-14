@@ -21,11 +21,8 @@ module October
       # as the bot might be started after booting the server
       r.class.refresh_multi_run_regexp!
 
-      # TODO: this can be replaced by normal r.multi_run(&block)
-      # when https://github.com/jeremyevans/roda/pull/32 is merged
-      r.on r.class.multi_run_regexp do |prefix|
+      r.multi_run do |prefix|
         env['october.plugin'.freeze] = bot.plugins[prefix]
-        r.run r.scope.class.multi_run_apps[prefix]
       end
     end
   end

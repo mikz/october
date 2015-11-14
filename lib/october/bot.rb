@@ -1,21 +1,33 @@
-require 'cinch'
+require 'slack-ruby-client'
 
 module October
-  class Bot < ::Cinch::Bot
-    include October::Thread
+  class Bot
 
-    def initialize(*)
-      super
-      @plugins = October::PluginList.new(self, @plugins)
-      set_nick @config.nick
+    attr_reader :client
+
+    def initialize(token: nil, concurrency: nil, plugins: nil, shared: nil)
+      @client = Slack::RealTime::Client.new(token: token,
+                                            concurrency: concurrency)
+
+      @plugins_config = plugins
+    end
+
+    def start
+      register_plugins
+
+      client.async_start
+    end
+
+    def register_plugins
+      @plugins = @plugins_config.fetch(:plugins).map{ |plugin| plugin.new(self) }
+    end
+
+    def register_matcher(matcher)
+      client.on(matcher.type, &matcher)
     end
 
     def self.available_options
-      Cinch::Configuration::Bot::KnownOptions
-    end
-
-    def quit!
-      @quitting = true
+      %i[token concurrency plugins shared]
     end
   end
 end

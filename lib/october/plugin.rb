@@ -1,13 +1,23 @@
-require 'cinch/plugin'
+require 'ostruct'
 
 module October
   module Plugin
     autoload :Help, 'october/plugin/help'
+    autoload :Hello, 'october/plugin/hello'
 
     def self.included(base)
-      base.include(Cinch::Plugin)
       base.extend(ClassMethods)
       base.prepend(RegisterMethods)
+    end
+
+    extend Forwardable
+
+    attr_reader :bot
+    def_delegators :bot, :client
+
+    def initialize(bot)
+      @bot = bot
+      @matchers = self.class.matchers.map{ |matcher| bot.register_matcher(matcher.call(self)) }
     end
 
     @@help = {}
@@ -54,8 +64,113 @@ module October
         mount plugin_name, app
       end
 
+      def plugin_name
+        path = name.to_s
+
+        if i = path.rindex('::')
+          path[(i+2)..-1]
+        else
+          path
+        end
+      end
+
+      def match(expression, **options)
+        matchers << Matcher.new(expression: expression, **options)
+      end
+
+
+      def on(event, **options)
+        matchers << Matcher.new(type: event, **options)
+      end
+
+      def matchers
+        @matchers ||= Set.new
+      end
+
       def mounts
         @mounts
+      end
+    end
+
+    class Message < OpenStruct; end
+
+    class Matcher
+      attr_reader :type
+
+      def initialize(expression: nil, prefix: nil, method: :execute, type: :message)
+        @expression = expression
+        @prefix = prefix
+        @method = method
+        @type = type
+      end
+
+      def to_proc
+        public_send("#{type}_handler")
+      end
+
+      def call(object)
+        MessageDelegator.new BoundMatcherDelegator.new(self, object)
+      end
+
+      class BoundMatcherDelegator < SimpleDelegator
+        def initialize(matcher, object)
+          super(matcher)
+          @object = object
+        end
+
+        def to_proc
+          -> (message) do
+            method, args = super.call(message)
+
+            return unless method
+
+            m = @object.method(method)
+
+            if m.arity == 1 || args.nil?
+              m.call(message)
+            elsif args.is_a?(Hash)
+              m.call(message, **args)
+            elsif args.is_a?(Array)
+              m.call(message, *args)
+            else
+              fail "unknown handler format #{m} #{args}"
+            end
+          end
+        end
+      end
+
+      class MessageDelegator < SimpleDelegator
+        def to_proc
+          -> (data) do
+            message = Message.new(data)
+            super.call(message)
+          end
+        end
+      end
+
+      def hello_handler
+        -> (message) do
+          [@method]
+        end
+      end
+
+      def message_handler
+        -> (message) do
+          match = message.text.match(@expression)
+
+          return unless match
+
+          names = match.names
+          captures = match.captures
+
+          args = if names.size == captures.size
+            names.map(&:to_sym).zip(captures).to_h
+          else
+            captures
+          end
+
+          [@method, args]
+        end
       end
     end
   end

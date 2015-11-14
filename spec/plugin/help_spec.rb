@@ -2,7 +2,7 @@ RSpec.describe October::Plugin::Help do
   include_context :plugin
 
   def message(msg)
-    Cinch::Message.new(":nick!nick@example.com MSG #{msg}", bot)
+    ":nick!nick@example.com MSG #{msg}"
   end
 
   it do

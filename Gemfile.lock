@@ -1,25 +1,63 @@
+GIT
+  remote: git://github.com/dblock/slack-ruby-client.git
+  revision: 1872a12f0b945141be43a7c860bad79dd022f8f4
+  branch: master
+  specs:
+    slack-ruby-client (0.5.0)
+      faraday
+      faraday_middleware
+      json
+      websocket-driver
+
 PATH
   remote: .
   specs:
     october (2.0.0.pre)
-      cinch (~> 2.2.5)
       pry
       rack
-      roda (~> 2.3)
+      roda (~> 2.7)
+      slack-ruby-client (~> 0.5.0)
       thor
 
 GEM
   remote: https://rubygems.org/
   specs:
-    cinch (2.2.5)
+    celluloid (0.17.2)
+      celluloid-essentials
+      celluloid-extras
+      celluloid-fsm
+      celluloid-pool
+      celluloid-supervision
+      timers (>= 4.1.1)
+    celluloid-essentials (0.20.5)
+      timers (>= 4.1.1)
+    celluloid-extras (0.20.5)
+      timers (>= 4.1.1)
+    celluloid-fsm (0.20.5)
+      timers (>= 4.1.1)
+    celluloid-io (0.17.2)
+      celluloid (>= 0.17.2)
+      nio4r (>= 1.1)
+      timers (>= 4.1.1)
+    celluloid-pool (0.20.5)
+      timers (>= 4.1.1)
+    celluloid-supervision (0.20.5)
+      timers (>= 4.1.1)
     codeclimate-test-reporter (0.4.7)
       simplecov (>= 0.7.1, < 1.0.0)
     coderay (1.1.0)
     diff-lcs (1.2.5)
     docile (1.1.5)
-    json (1.8.2)
+    faraday (0.9.2)
+      multipart-post (>= 1.2, < 3)
+    faraday_middleware (0.10.0)
+      faraday (>= 0.7.4, < 0.10)
+    hitimes (1.2.3)
+    json (1.8.3)
     method_source (0.8.2)
-    pry (0.10.1)
+    multipart-post (2.0.0)
+    nio4r (1.1.1)
+    pry (0.10.3)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
@@ -27,7 +65,7 @@ GEM
     rack-test (0.6.3)
       rack (>= 1.0)
     rake (10.4.2)
-    roda (2.3.0)
+    roda (2.7.0)
       rack
     rspec (3.2.0)
       rspec-core (~> 3.2.0)
@@ -49,14 +87,24 @@ GEM
     simplecov-html (0.10.0)
     slop (3.6.0)
     thor (0.19.1)
+    timers (4.1.1)
+      hitimes
+    websocket-driver (0.6.3)
+      websocket-extensions (>= 0.1.0)
+    websocket-extensions (0.1.2)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   bundler (~> 1.6)
+  celluloid-io
   codeclimate-test-reporter
   october!
   rack-test
   rake (~> 10.0)
   rspec (~> 3.2)
+  slack-ruby-client!
+
+BUNDLED WITH
+   1.10.6

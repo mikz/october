@@ -23,7 +23,7 @@ RSpec.describe October::Plugin::GithubWebhooks::Server do
   end
 
   before do
-    plugin.shared.merge!('github' => '#channel')
+    # plugin.shared.merge!('github' => '#channel')
   end
 
   context 'deployment webhook' do
