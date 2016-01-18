@@ -8,12 +8,11 @@ module October
       on :hello, method: :hello
 
       def execute(m)
-        client.typing channel: m.channel
-        client.message channel: m.channel, text: "Hi <@#{m.user}>!"
+        client.reply_with "Hi <@#{m.user}>!", to: m
       end
 
       def hello(m)
-        client.typing channel: '#octobot'
+        client.typing '#octobot'
       end
     end
   end

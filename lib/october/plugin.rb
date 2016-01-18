@@ -20,6 +20,10 @@ module October
       @matchers = self.class.matchers.map{ |matcher| bot.register_matcher(matcher.call(self)) }
     end
 
+    def shared
+      bot.shared_config
+    end
+
     @@help = {}
 
     def self.help
@@ -28,14 +32,14 @@ module October
 
     module RegisterMethods
       def __register
-        super
+        super if defined?(super)
         __register_server
       end
 
       def __register_server
-
         self.class.mounts.each_pair do |prefix, app|
-          @bot.loggers.debug "[plugin] #{self.class.plugin_name}: Registering prefix #{prefix} with web server #{app}"
+          prefix = prefix.respond_to?(:call) ? prefix.call : prefix
+          @bot.logger.debug "[plugin] #{self.class.plugin_name}: Registering prefix #{prefix} with web server #{app}"
           October::Server.run(prefix, app)
         end
       end
@@ -46,6 +50,12 @@ module October
     module ClassMethods
       def self.extended(mod)
         mod.instance_variable_set(:@mounts, {})
+        name = mod.plugin_name
+        mod.singleton_class.instance_eval do
+          attr_accessor :plugin_name, :mounts
+        end
+        mod.mounts = {}
+        mod.plugin_name = name
       end
 
       def register_help(command, description = nil)
@@ -61,23 +71,24 @@ module October
       end
 
       def app(app)
-        mount plugin_name, app
+        mount method(:plugin_name), app
       end
 
       def plugin_name
-        path = name.to_s
+        defined?(super) && super || begin
+          path = name.to_s
 
-        if i = path.rindex('::')
-          path[(i+2)..-1]
-        else
-          path
+          if (i = path.rindex('::'))
+            path[(i+2)..-1]
+          else
+            path
+          end
         end
       end
 
       def match(expression, **options)
         matchers << Matcher.new(expression: expression, **options)
       end
-
 
       def on(event, **options)
         matchers << Matcher.new(type: event, **options)

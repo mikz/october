@@ -24,7 +24,7 @@ module October
             @@events
           end
 
-          def parse(request)
+          def parse!(request)
             name = request.env.fetch('HTTP_X_GITHUB_EVENT')
             payload = JSON.parse(request.body.read)
 
@@ -135,7 +135,7 @@ module October
             bot = env['october.bot']
             plugin = env['october.plugin']
 
-            event = Event.parse(request)
+            event = Event.parse!(request)
 
             plugin.announce(event)
 
@@ -148,12 +148,14 @@ module October
 
       app Server.app
 
+      self.plugin_name = 'github-webhooks'
 
       def announce(event)
-        channel = shared['github']
+        channel = shared['github'] or fail 'missing channel configuration'
 
-        october = bot.channel_list.find_ensured(channel)
-        october.send event
+        october = client.channels[channel] or fail "unknown channel: #{channel}"
+
+        client.message(event, to: october)
       end
     end
   end

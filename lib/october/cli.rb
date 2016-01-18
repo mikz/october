@@ -1,5 +1,10 @@
 require 'thor'
 
+begin
+require 'pry'
+rescue LoadError
+end
+
 require 'october'
 
 require 'october/plugin/github'
@@ -25,6 +30,7 @@ module October
     end
 
     desc 'console', 'start console with loaded bot and server'
+    method_option :token, type: :string, required: false
     def console
       require 'pry'
 
@@ -89,6 +95,7 @@ module October
           plugins: [
               October::Plugin::GithubWebhooks,
               October::Plugin::Github,
+              October::Plugin::Help,
               October::Plugin::Hello,
           ]
       }

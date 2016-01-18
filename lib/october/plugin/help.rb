@@ -10,7 +10,7 @@ module October
 
       def help(m)
         msg = ['October help:', list_help].join("\n")
-        m.user.send msg
+        client.reply_with msg, to: m
       end
 
       protected
