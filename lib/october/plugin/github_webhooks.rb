@@ -155,6 +155,19 @@ module October
         end
       end
 
+      module EventAssignee
+        attr_reader :assignee
+
+        def initialize(*)
+          super
+          @assignee = payload.dig('assignee', 'login')
+        end
+
+        def as_json(*)
+          super.merge(assignee: assignee)
+        end
+      end
+
       class IssueCommentEvent < Event
         attr_reader :user
         include EventAction
@@ -170,23 +183,22 @@ module October
       end
 
       class IssuesEvent < Event
-        attr_reader :label, :assignee, :url
-        include EventAction
+        attr_reader :label, :url
+        include EventAction, EventAssignee
 
         def initialize(*)
           super
           @url = payload.fetch('issue').fetch('url')
-          @assignee = payload.dig('assignee', 'login')
           @label = payload.dig('label','name')
         end
 
         def as_json(*)
-          super.merge(label: label, assignee: assignee)
+          super.merge(label: label)
         end
       end
 
       class PullRequestEvent < Event
-        include EventAction
+        include EventAction, EventAssignee
         attr_reader :number
 
         def initialize(*)
