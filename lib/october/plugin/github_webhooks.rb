@@ -1,6 +1,7 @@
 require 'october/plugin'
 require 'roda'
 require 'json'
+require 'celluloid/current'
 
 module October
   module Plugin
@@ -53,6 +54,10 @@ module October
           super || self.class.event
         end
 
+        def scope
+          [name]
+        end
+
         def to_json(options = {})
           as_json.to_json(options)
         end
@@ -63,6 +68,8 @@ module October
       end
 
       class DeploymentEvent < Event
+        attr_reader :deployment, :sha, :environment, :creator
+
         def initialize(*)
           super
           @deployment = payload.fetch('deployment')
@@ -71,25 +78,37 @@ module October
           @creator = @deployment.fetch('creator').fetch('login')
         end
 
+        def scope
+          super + [ environment ]
+        end
+
         def as_json(*)
-          { environment: @environment, creator: @creator, sha: @sha }
+          { environment: environment, creator: creator, sha: sha }
         end
       end
 
       class StatusEvent < Event
+        attr_reader :context, :state
+
         def initialize(*)
           super
           @context = payload.fetch('context')
           @state = payload.fetch('state')
         end
 
+        def scope
+          super + [ context ]
+        end
+
         def as_json(*)
-          { context: @context, state: @state }
+          { context: context, state: state }
         end
       end
 
 
       class PushEvent < Event
+        attr_reader :ref, :before, :after
+
         def initialize(*)
           super
           @ref = payload.fetch('ref')
@@ -97,15 +116,25 @@ module October
           @after = payload.fetch('after')
         end
 
+        def scope
+          super + [ ref ]
+        end
+
         def as_json(*)
-          { ref: @ref, before: @before, after: @after }
+          { ref: ref, before: before, after: after }
         end
       end
 
       module EventAction
+        attr_reader :action
+
         def initialize(*)
           super
           @action = payload.fetch('action')
+        end
+
+        def scope
+          super + [ action ]
         end
 
         def as_json(*)
@@ -116,6 +145,7 @@ module October
       class IssuesEvent < Event
         attr_reader :label, :assignee
         include EventAction
+
         def initialize(*)
           super
           @assignee = payload['assignee']
@@ -142,6 +172,7 @@ module October
       end
 
       class DeploymentStatusEvent < DeploymentEvent
+        attr_reader :state
 
         def initialize(*)
           super
@@ -149,8 +180,12 @@ module October
           @state = @deployment_status.fetch('state')
         end
 
+        def scope
+          super + [ state ]
+        end
+
         def as_json(*)
-          super.merge(state: @state, environment: @environment)
+          super.merge(state: state, environment: environment)
         end
       end
 
@@ -178,6 +213,8 @@ module October
 
       def announce(event)
         channel = shared['github'] or fail 'missing channel configuration'
+        pub_chan = ([channel] + event.scope).join('.')
+        Celluloid.publish(pub_chan, event)
 
         october = client.channels[channel] or fail "unknown channel: #{channel}"
 

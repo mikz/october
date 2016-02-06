@@ -1,4 +1,5 @@
 require 'ostruct'
+require 'celluloid/current'
 
 module October
   module Plugin
@@ -6,6 +7,7 @@ module October
     autoload :Hello, 'october/plugin/hello'
 
     def self.included(base)
+      base.include(Celluloid)
       base.extend(ClassMethods)
       base.prepend(RegisterMethods)
     end
