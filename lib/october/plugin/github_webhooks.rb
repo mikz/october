@@ -2,6 +2,8 @@ require 'october/plugin'
 require 'roda'
 require 'json'
 require 'celluloid/current'
+require 'openssl'
+require 'rack/utils'
 
 module October
   module Plugin
@@ -25,9 +27,18 @@ module October
             @@events
           end
 
+          class SignatureMismatchError < StandardError; end
+
+          def verify_signature!(request, payload_body)
+            signature = 'sha1=' + OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha1'), ENV.fetch('GITHUB_SECURE_TOKEN'), payload_body)
+            raise SignatureMismatchError, "Signatures didn't match!" unless Rack::Utils.secure_compare(signature, request.env.fetch('HTTP_X_HUB_SIGNATURE'))
+          end
+
           def parse!(request)
             name = request.env.fetch('HTTP_X_GITHUB_EVENT')
-            payload = JSON.parse(request.body.read)
+            body = request.body.read
+            verify_signature!(request, body)
+            payload = JSON.parse(body)
 
             Celluloid.logger.debug JSON.pretty_generate(payload)
 
