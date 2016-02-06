@@ -30,7 +30,7 @@ module October
           class SignatureMismatchError < StandardError; end
 
           def verify_signature!(request, payload_body)
-            signature = 'sha1=' + OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha1'), ENV.fetch('GITHUB_SECURE_TOKEN'), payload_body)
+            signature = 'sha1=' + OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha1'), ENV.fetch('GITHUB_SECURE_TOKEN'){ return }, payload_body)
             raise SignatureMismatchError, "Signatures didn't match!" unless Rack::Utils.secure_compare(signature, request.env.fetch('HTTP_X_HUB_SIGNATURE'))
           end
 
