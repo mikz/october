@@ -52,7 +52,8 @@ module October
         end
       end
 
-      def issues_assigned(event)
+
+      def assigned(event)
         member = teams.find do |team|
           team.has_member?(event.assignee)
         end
@@ -62,6 +63,9 @@ module October
           assign_team(issue, member)
         end
       end
+
+      alias_method :issues_assigned, :assigned
+      alias_method :pull_request_assigned, :assigned
 
       protected
 
