@@ -82,8 +82,16 @@ module October
           @octokit = octokit
         end
 
+        def issue
+          if (issue = @octokit.rels[:issue])
+            issue.get.data
+          else
+            self
+          end
+        end
+
         def repository
-          name = @octokit.rels[:repository].get.data[:full_name]
+          name = issue.rels[:repository].get.data[:full_name]
           Octokit::Repository.new(name)
         end
 
