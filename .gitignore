@@ -8,3 +8,5 @@
 /tmp/
 /log/
 .*.swo
+.env
+.env.*
