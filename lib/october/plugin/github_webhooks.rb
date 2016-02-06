@@ -118,8 +118,8 @@ module October
         include EventAction
         def initialize(*)
           super
-          @assignee = payload.fetch('assignee')
-          @label = payload.fetch('label')
+          @assignee = payload['assignee']
+          @label = payload['label']
         end
 
         def as_json(*)
