@@ -1,0 +1,175 @@
+{
+  "ref": "refs/heads/v2",
+  "before": "445083e568e2771cdec5e30051ce6cd918ce28bb",
+  "after": "c844384ce5d0a2e29cc2a1727182b0dddff074d6",
+  "created": false,
+  "deleted": false,
+  "forced": false,
+  "base_ref": null,
+  "compare": "https://github.com/mikz/october/compare/445083e568e2...c844384ce5d0",
+  "commits": [
+    {
+      "id": "c844384ce5d0a2e29cc2a1727182b0dddff074d6",
+      "distinct": true,
+      "message": "send github events to irc as notice",
+      "timestamp": "2015-06-14T14:08:53+02:00",
+      "url": "https://github.com/mikz/october/commit/c844384ce5d0a2e29cc2a1727182b0dddff074d6",
+      "author": {
+        "name": "Michal Cichra",
+        "email": "michal@o2h.cz",
+        "username": "mikz"
+      },
+      "committer": {
+        "name": "Michal Cichra",
+        "email": "michal@o2h.cz",
+        "username": "mikz"
+      },
+      "added": [
+        "spec/fixtures/webhooks/deployment_status.json",
+        "spec/helpers/rack_context.rb"
+      ],
+      "removed": [
+        "october/.travis.yml"
+      ],
+      "modified": [
+        "Gemfile.lock",
+        "lib/october/cli.rb",
+        "lib/october/plugin/github.rb",
+        "lib/october/server.rb",
+        "october.gemspec",
+        "spec/plugin/github_spec.rb",
+        "spec/spec_helper.rb"
+      ]
+    }
+  ],
+  "head_commit": {
+    "id": "c844384ce5d0a2e29cc2a1727182b0dddff074d6",
+    "distinct": true,
+    "message": "send github events to irc as notice",
+    "timestamp": "2015-06-14T14:08:53+02:00",
+    "url": "https://github.com/mikz/october/commit/c844384ce5d0a2e29cc2a1727182b0dddff074d6",
+    "author": {
+      "name": "Michal Cichra",
+      "email": "michal@o2h.cz",
+      "username": "mikz"
+    },
+    "committer": {
+      "name": "Michal Cichra",
+      "email": "michal@o2h.cz",
+      "username": "mikz"
+    },
+    "added": [
+      "spec/fixtures/webhooks/deployment_status.json",
+      "spec/helpers/rack_context.rb"
+    ],
+    "removed": [
+      "october/.travis.yml"
+    ],
+    "modified": [
+      "Gemfile.lock",
+      "lib/october/cli.rb",
+      "lib/october/plugin/github.rb",
+      "lib/october/server.rb",
+      "october.gemspec",
+      "spec/plugin/github_spec.rb",
+      "spec/spec_helper.rb"
+    ]
+  },
+  "repository": {
+    "id": 2298362,
+    "name": "october",
+    "full_name": "mikz/october",
+    "owner": {
+      "name": "mikz",
+      "email": "mikz@users.noreply.github.com"
+    },
+    "private": false,
+    "html_url": "https://github.com/mikz/october",
+    "description": "irc bot based on cinch named after Autumn (nice but too heavy)",
+    "fork": false,
+    "url": "https://github.com/mikz/october",
+    "forks_url": "https://api.github.com/repos/mikz/october/forks",
+    "keys_url": "https://api.github.com/repos/mikz/october/keys{/key_id}",
+    "collaborators_url": "https://api.github.com/repos/mikz/october/collaborators{/collaborator}",
+    "teams_url": "https://api.github.com/repos/mikz/october/teams",
+    "hooks_url": "https://api.github.com/repos/mikz/october/hooks",
+    "issue_events_url": "https://api.github.com/repos/mikz/october/issues/events{/number}",
+    "events_url": "https://api.github.com/repos/mikz/october/events",
+    "assignees_url": "https://api.github.com/repos/mikz/october/assignees{/user}",
+    "branches_url": "https://api.github.com/repos/mikz/october/branches{/branch}",
+    "tags_url": "https://api.github.com/repos/mikz/october/tags",
+    "blobs_url": "https://api.github.com/repos/mikz/october/git/blobs{/sha}",
+    "git_tags_url": "https://api.github.com/repos/mikz/october/git/tags{/sha}",
+    "git_refs_url": "https://api.github.com/repos/mikz/october/git/refs{/sha}",
+    "trees_url": "https://api.github.com/repos/mikz/october/git/trees{/sha}",
+    "statuses_url": "https://api.github.com/repos/mikz/october/statuses/{sha}",
+    "languages_url": "https://api.github.com/repos/mikz/october/languages",
+    "stargazers_url": "https://api.github.com/repos/mikz/october/stargazers",
+    "contributors_url": "https://api.github.com/repos/mikz/october/contributors",
+    "subscribers_url": "https://api.github.com/repos/mikz/october/subscribers",
+    "subscription_url": "https://api.github.com/repos/mikz/october/subscription",
+    "commits_url": "https://api.github.com/repos/mikz/october/commits{/sha}",
+    "git_commits_url": "https://api.github.com/repos/mikz/october/git/commits{/sha}",
+    "comments_url": "https://api.github.com/repos/mikz/october/comments{/number}",
+    "issue_comment_url": "https://api.github.com/repos/mikz/october/issues/comments{/number}",
+    "contents_url": "https://api.github.com/repos/mikz/october/contents/{+path}",
+    "compare_url": "https://api.github.com/repos/mikz/october/compare/{base}...{head}",
+    "merges_url": "https://api.github.com/repos/mikz/october/merges",
+    "archive_url": "https://api.github.com/repos/mikz/october/{archive_format}{/ref}",
+    "downloads_url": "https://api.github.com/repos/mikz/october/downloads",
+    "issues_url": "https://api.github.com/repos/mikz/october/issues{/number}",
+    "pulls_url": "https://api.github.com/repos/mikz/october/pulls{/number}",
+    "milestones_url": "https://api.github.com/repos/mikz/october/milestones{/number}",
+    "notifications_url": "https://api.github.com/repos/mikz/october/notifications{?since,all,participating}",
+    "labels_url": "https://api.github.com/repos/mikz/october/labels{/name}",
+    "releases_url": "https://api.github.com/repos/mikz/october/releases{/id}",
+    "created_at": 1314745128,
+    "updated_at": "2015-03-01T00:03:50Z",
+    "pushed_at": 1434283765,
+    "git_url": "git://github.com/mikz/october.git",
+    "ssh_url": "git@github.com:mikz/october.git",
+    "clone_url": "https://github.com/mikz/october.git",
+    "svn_url": "https://github.com/mikz/october",
+    "homepage": "",
+    "size": 460,
+    "stargazers_count": 40,
+    "watchers_count": 40,
+    "language": "Ruby",
+    "has_issues": true,
+    "has_downloads": true,
+    "has_wiki": true,
+    "has_pages": false,
+    "forks_count": 4,
+    "mirror_url": null,
+    "open_issues_count": 3,
+    "forks": 4,
+    "open_issues": 3,
+    "watchers": 40,
+    "default_branch": "master",
+    "stargazers": 40,
+    "master_branch": "master"
+  },
+  "pusher": {
+    "name": "mikz",
+    "email": "mikz@users.noreply.github.com"
+  },
+  "sender": {
+    "login": "mikz",
+    "id": 154571,
+    "avatar_url": "https://avatars.githubusercontent.com/u/154571?v=3",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/mikz",
+    "html_url": "https://github.com/mikz",
+    "followers_url": "https://api.github.com/users/mikz/followers",
+    "following_url": "https://api.github.com/users/mikz/following{/other_user}",
+    "gists_url": "https://api.github.com/users/mikz/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/mikz/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/mikz/subscriptions",
+    "organizations_url": "https://api.github.com/users/mikz/orgs",
+    "repos_url": "https://api.github.com/users/mikz/repos",
+    "events_url": "https://api.github.com/users/mikz/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/mikz/received_events",
+    "type": "User",
+    "site_admin": false
+  }
+}

@@ -1,5 +1,21 @@
-shared_context :bot do
-  let(:irc) { Cinch::IRC.new(bot) }
-  let(:bot) { October::Base.new }
-  before(:each) { bot.stub(:irc) { irc.setup; irc } }
+module BotContext
+  module TestingIRC
+    attr_accessor :queue
+  end
+
+  class FakeSocket
+
+  end
+end
+
+RSpec.shared_context :bot do
+  let(:socket) { BotContext::FakeSocket.new }
+
+  let(:bot) { October::Bot.new(concurrency: :fake) }
+
+  let(:log) { StringIO.new }
+
+  before do
+
+  end
 end

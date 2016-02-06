@@ -1,8 +1,5 @@
 rvm:
-  - 2.0
-  - 2.1
-  - 2.2
-script: rake integrate
+  - 2.2.4
 env:
   OCTOBER_ENV: test
 sudo: false

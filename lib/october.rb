@@ -1,16 +1,9 @@
-require 'active_support/core_ext'
+require 'october/version'
 
 module October
-  autoload :Config, 'october/config'
-  autoload :Base, 'october/base'
-  autoload :Environment, 'october/environment'
-  autoload :Redis, 'october/redis'
-  autoload :Debugger, 'october/debugger'
-  autoload :Plugins, 'october/plugins'
+  autoload :Bot, 'october/bot'
   autoload :Plugin, 'october/plugin'
-
-  def self.root
-    Pathname.new('.').expand_path
-  end
+  autoload :Server, 'october/server'
+  autoload :Thread, 'october/thread'
+  autoload :PluginList, 'october/plugin_list'
 end
-
