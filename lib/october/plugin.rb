@@ -162,16 +162,15 @@ module October
       end
 
       def hello_handler
-        -> (message) do
+        -> (_message) do
           [@method]
         end
       end
 
       def message_handler
         -> (message) do
-          match = message.text.match(@expression)
-
-          return unless match
+          text = message.text or return
+          match = text.match(@expression) or return
 
           names = match.names
           captures = match.captures
