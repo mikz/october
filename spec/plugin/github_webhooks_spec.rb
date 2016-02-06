@@ -6,7 +6,7 @@ RSpec.describe October::Plugin::GithubWebhooks do
   it { is_expected.to be }
 
   it 'has application' do
-    expect(described_class.mounts).to have_key(described_class.plugin_name)
+    expect(described_class.mounts).to have_key(described_class.method(:plugin_name))
     expect(described_class)
   end
 end
@@ -53,7 +53,7 @@ RSpec.describe October::Plugin::GithubWebhooks::Server do
     it 'works' do
       expect(plugin).to receive(:announce).with(an_instance_of(October::Plugin::GithubWebhooks::PullRequestEvent))
       post '/', headers: { 'X-GitHub-Event' => 'pull_request' }, params: webhook, env: env
-      expect(last_response.body).to eq('{"number":29,"action":"synchronize"}')
+      expect(last_response.body).to eq('{"action":"synchronize","number":29}')
     end
   end
 

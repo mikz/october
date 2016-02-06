@@ -102,16 +102,42 @@ module October
         end
       end
 
-
-      class PullRequestEvent < Event
+      module EventAction
         def initialize(*)
           super
-          @number = payload.fetch('number')
           @action = payload.fetch('action')
         end
 
         def as_json(*)
-          { number: @number, action: @action }
+          super.merge(action: @action)
+        end
+      end
+
+      class IssuesEvent < Event
+        attr_reader :label, :assignee
+        include EventAction
+        def initialize(*)
+          super
+          @assignee = payload.fetch('assignee')
+          @label = payload.fetch('label')
+        end
+
+        def as_json(*)
+          super.merge(label: label, assignee: assignee)
+        end
+      end
+
+      class PullRequestEvent < Event
+        include EventAction
+        attr_reader :number
+
+        def initialize(*)
+          super
+          @number = payload.fetch('number')
+        end
+
+        def as_json(*)
+          super.merge(number: number)
         end
       end
 
