@@ -25,7 +25,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rspec', '~> 3.2'
   spec.add_development_dependency 'rack-test'
 
-  spec.add_dependency 'slack-ruby-client', '~> 0.5.0'
+  spec.add_dependency 'slack-ruby-client', '~> 0.6.0'
+  spec.add_dependency 'celluloid-io'
   spec.add_dependency 'thor'
   spec.add_dependency 'rack'
   spec.add_dependency 'roda', '~> 2.7'

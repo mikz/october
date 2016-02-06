@@ -2,17 +2,18 @@ PATH
   remote: .
   specs:
     october (2.0.0.pre)
+      celluloid-io
       pry
       rack
       roda (~> 2.7)
-      slack-ruby-client (~> 0.5.0)
+      slack-ruby-client (~> 0.6.0)
       thor
 
 GEM
   remote: https://rubygems.org/
   specs:
     byebug (8.2.1)
-    celluloid (0.17.2)
+    celluloid (0.17.3)
       celluloid-essentials
       celluloid-extras
       celluloid-fsm
@@ -25,7 +26,7 @@ GEM
       timers (>= 4.1.1)
     celluloid-fsm (0.20.5)
       timers (>= 4.1.1)
-    celluloid-io (0.17.2)
+    celluloid-io (0.17.3)
       celluloid (>= 0.17.2)
       nio4r (>= 1.1)
       timers (>= 4.1.1)
@@ -43,11 +44,12 @@ GEM
     faraday_middleware (0.10.0)
       faraday (>= 0.7.4, < 0.10)
     gli (2.13.4)
+    hashie (3.4.3)
     hitimes (1.2.3)
     json (1.8.3)
     method_source (0.8.2)
     multipart-post (2.0.0)
-    nio4r (1.1.1)
+    nio4r (1.2.1)
     pry (0.10.3)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -59,7 +61,7 @@ GEM
     rack-test (0.6.3)
       rack (>= 1.0)
     rake (10.4.2)
-    roda (2.7.0)
+    roda (2.10.0)
       rack
     rspec (3.2.0)
       rspec-core (~> 3.2.0)
@@ -79,10 +81,11 @@ GEM
       json (~> 1.8)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.0)
-    slack-ruby-client (0.5.3)
+    slack-ruby-client (0.6.0)
       faraday
       faraday_middleware
       gli
+      hashie
       json
       websocket-driver
     slop (3.6.0)
@@ -98,14 +101,12 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (~> 1.6)
-  celluloid-io
   codeclimate-test-reporter
   october!
   pry-byebug
   rack-test
   rake (~> 10.0)
   rspec (~> 3.2)
-  slack-ruby-client (~> 0.5.3)
 
 BUNDLED WITH
    1.11.2

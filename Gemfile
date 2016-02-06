@@ -7,8 +7,5 @@ ruby '2.2.4'
 gemspec
 
 gem 'codeclimate-test-reporter', group: :test, require: nil
-gem 'slack-ruby-client', '~> 0.5.3'
 
-gem 'celluloid-io'
-
-gem 'pry-byebug'
+gem 'pry-byebug', group: :development
