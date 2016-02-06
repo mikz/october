@@ -49,8 +49,8 @@ module October
 
     class Channel
       def self.to_proc
-        to_attributes = ->(options) { options.map{|k,v| [ k.to_sym, v ] }.to_h }
-        ->(attributes) { new(to_attributes.(attributes)) }
+        to_attributes = lambda { |(_id, options)| options.map{|k,v| [ k.to_sym, v ] }.to_h }
+        ->(channel) { new(to_attributes.(channel)) }
       end
 
       attr_reader :id, :name
