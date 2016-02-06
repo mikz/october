@@ -29,6 +29,8 @@ module October
             name = request.env.fetch('HTTP_X_GITHUB_EVENT')
             payload = JSON.parse(request.body.read)
 
+            Celluloid.logger.debug JSON.pretty_generate(payload)
+
             entity = events.find { |e| e.event == name } || self
 
             entity.new(payload, name)
@@ -142,14 +144,29 @@ module October
         end
       end
 
-      class IssuesEvent < Event
-        attr_reader :label, :assignee
+      class IssueCommentEvent < Event
+        attr_reader :user
         include EventAction
 
         def initialize(*)
           super
-          @assignee = payload['assignee']
-          @label = payload['label']
+          @user = payload.fetch('comment').fetch('user').fetch('login')
+        end
+
+        def as_json(*)
+          super.merge(user: user)
+        end
+      end
+
+      class IssuesEvent < Event
+        attr_reader :label, :assignee, :url
+        include EventAction
+
+        def initialize(*)
+          super
+          @url = payload.fetch('issue').fetch('url')
+          @assignee = payload.dig('assignee', 'login')
+          @label = payload.dig('label','name')
         end
 
         def as_json(*)
