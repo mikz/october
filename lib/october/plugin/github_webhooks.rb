@@ -199,10 +199,11 @@ module October
 
       class PullRequestEvent < Event
         include EventAction, EventAssignee
-        attr_reader :number
+        attr_reader :number, :url
 
         def initialize(*)
           super
+          @url = payload.fetch('pull_request').fetch('url')
           @number = payload.fetch('number')
         end
 
