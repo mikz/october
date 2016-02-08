@@ -240,7 +240,7 @@ module October
 
             event = Event.parse!(request)
 
-            plugin.announce(event)
+            plugin.async.announce(event)
 
             response['Content-Type'] = request.content_type
             event.to_json
