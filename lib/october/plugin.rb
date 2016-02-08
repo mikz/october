@@ -169,8 +169,7 @@ module October
 
       def message_handler
         -> (message) do
-          text = message.text or return
-          match = text.match(@expression) or return
+          match = message&.text&.match(@expression) or return
 
           names = match.names
           captures = match.captures
