@@ -83,7 +83,7 @@ module October
       end
 
       def assign_user(issue, user)
-        client.patch(issue[:url], assignee: user)
+        client.patch(issue.href, assignee: user)
       end
 
       def teams
@@ -96,10 +96,20 @@ module October
         end
 
         def issue
-          if (issue = @octokit.rels[:issue])
-            issue.get.data
+          @_issue ||= begin
+            if (issue = @octokit.rels[:issue])
+              self.class.new(issue.get.data)
+            else
+              self
+            end
+          end
+        end
+
+        def href
+          if issue == self
+            @octokit[:url]
           else
-            self
+            issue.href
           end
         end
 
@@ -108,8 +118,13 @@ module October
         end
 
         def repository
-          name = issue.rels[:repository].get.data[:full_name]
-          Octokit::Repository.new(name)
+          repo = @octokit.rels[:repository]
+
+          if repo
+            Octokit::Repository.new(repo.get.data[:full_name])
+          else
+            issue.repository
+          end
         end
 
         def number
