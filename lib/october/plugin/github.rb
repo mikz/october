@@ -67,10 +67,23 @@ module October
       alias_method :issues_assigned, :assigned
       alias_method :pull_request_assigned, :assigned
 
+      def pull_request_opened(event)
+        unless event.assignee
+          issue = Issue.new(client.get(event.url))
+
+          unless issue.assignee
+            assign_user(issue, event.user)
+          end
+        end
+      end
       protected
 
       def assign_team(issue, team)
         client.add_labels_to_an_issue(issue.repository, issue.number, Array(team.label))
+      end
+
+      def assign_user(issue, user)
+        client.patch(issue[:url], assignee: user)
       end
 
       def teams
@@ -88,6 +101,10 @@ module October
           else
             self
           end
+        end
+
+        def assignee
+          @octokit[:assignee]
         end
 
         def repository

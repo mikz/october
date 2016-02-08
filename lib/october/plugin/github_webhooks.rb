@@ -199,16 +199,17 @@ module October
 
       class PullRequestEvent < Event
         include EventAction, EventAssignee
-        attr_reader :number, :url
+        attr_reader :number, :url, :user
 
         def initialize(*)
           super
           @url = payload.fetch('pull_request').fetch('url')
+          @user = payload.fetch('pull_request').fetch('user').fetch('login')
           @number = payload.fetch('number')
         end
 
         def as_json(*)
-          super.merge(number: number)
+          super.merge(number: number, user: user)
         end
       end
 
