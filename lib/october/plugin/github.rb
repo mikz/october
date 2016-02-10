@@ -9,11 +9,13 @@ module October
 
       attr_reader :client
 
+      finalizer :finalize
+
       def initialize(*)
         super # TODO: do not require plugin to have initialize, use attr accessors instead
 
-        if (channel = shared['github'])
-          subscribe(/^#{channel}/, :new_webhook)
+        if (pattern = channel_pattern)
+          @subscriber = subscribe(pattern, :new_webhook)
         end
 
         @client = Octokit.client
@@ -77,6 +79,12 @@ module October
         end
       end
       protected
+
+      def finalize
+        if @subscriber
+          unsubscribe(@subscriber)
+        end
+      end
 
       def assign_team(issue, team)
         client.add_labels_to_an_issue(issue.repository, issue.number, Array(team.label))
@@ -158,9 +166,12 @@ module October
         end
       end
 
-      def channel
-        name = config['channel'] || shared['github']
-        Channel(name)
+      def channel_pattern
+        channel = (shared['channel'] || shared['github'])
+
+        if channel
+          /^#{channel}/
+        end
       end
     end
   end
