@@ -95,7 +95,6 @@ module October
           plugins: [
               October::Plugin::GithubWebhooks,
               October::Plugin::Github,
-              October::Plugin::Help,
               October::Plugin::Hello,
           ]
       }
