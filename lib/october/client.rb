@@ -3,6 +3,7 @@ require 'slack-ruby-client'
 module October
   class Client
     attr_reader :client, :logger
+    alias slack client
     private :client, :logger
 
     def initialize(token:, concurrency:, logger: )
@@ -33,8 +34,10 @@ module October
       client.message channel: to, text: text.to_s
     end
 
+    NO_CHANNELS = {}.freeze
+
     def channels
-      ChannelList.new(client.channels)
+      ChannelList.new(client.channels || NO_CHANNELS)
     end
 
     class ChannelList

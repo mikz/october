@@ -21,7 +21,7 @@ module October
 
     def register_plugins
       @plugins = @plugins_config.fetch(:plugins)
-          .map{ |plugin| p plugin; plugin.supervise(as: plugin.plugin_name, args: [self]) }
+          .map{ |plugin| plugin.supervise(as: plugin.plugin_name, args: [self]) }
           .flat_map(&:actors).uniq.each(&:__register)
           .map{ |plugin| [ plugin.class.plugin_name, plugin ] }.to_h.freeze
     end

@@ -1,7 +1,7 @@
 require 'october/plugin'
 require 'roda'
 require 'json'
-require 'celluloid/current'
+require 'celluloid'
 require 'openssl'
 require 'rack/utils'
 
@@ -240,7 +240,14 @@ module October
 
             event = Event.parse!(request)
 
-            plugin.async.announce(event)
+            proxy = case env['october.dispatch']
+                    when 'async'
+                      plugin.async
+                    else
+                      plugin
+                    end
+
+            proxy.announce(event)
 
             response['Content-Type'] = request.content_type
             event.to_json

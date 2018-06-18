@@ -33,7 +33,8 @@ RSpec.describe October::Plugin do
       plugin.mount('prefix', app = Proc.new{})
 
       expect(October::Server).to receive(:run).with('prefix', app)
-      plugin.new(bot)
+
+      plugin.new(bot).__register
     end
   end
 
