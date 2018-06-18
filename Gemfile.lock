@@ -117,7 +117,7 @@ DEPENDENCIES
   bundler (~> 1.6)
   codeclimate-test-reporter
   october!
-  octokit (~> 4.2)
+  octokit (~> 4.9)
   pry-byebug
   rack-test
   rake (~> 12.3)
