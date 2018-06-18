@@ -7,7 +7,7 @@ ruby '~> 2.3'
 gem 'celluloid-io'
 gem 'rack'
 gem 'roda', '~> 3.9'
-gem 'slack-ruby-client', '~> 0.6.0'
+gem 'slack-ruby-client', '~> 0.11.1'
 gem 'thor'
 
 group :test do
