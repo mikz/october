@@ -2,6 +2,10 @@
 # frozen_string_literal: true
 
 require 'celluloid/current'
+
+require 'pathname'
+
+$LOAD_PATH << (Pathname(__dir__) / '..' / 'lib').to_path
 require 'october/cli'
 
 October::CLI.start
