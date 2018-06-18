@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Michal Cichra']
   spec.email         = ['michal.cichra@gmail.com']
 
-  spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
+  spec.summary       = %q{Slack bot for GitHub automation}
+  spec.description   = %q{Automates several GitHub related tasks like automatically assigning pull requests.}
   spec.homepage      = 'https://github.com/mikz/october'
   spec.license       = 'MIT'
 
