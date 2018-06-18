@@ -13,4 +13,4 @@ end
 
 
 gem 'pry-byebug', group: :development
-gem 'octokit', '~> 4.2'
+gem 'octokit', '~> 4.9'
