@@ -1,21 +1,34 @@
 module BotContext
-  module TestingIRC
-    attr_accessor :queue
-  end
+  class Socket
+    attr_reader :data
 
-  class FakeSocket
+    def initialize(url, options)
+      @url = url
+      @options = options
+      @data = []
+    end
 
+    def start_async
+      yield
+    end
+
+    def connect!
+      @connected = true
+    end
+
+    def connected?
+      @connected
+    end
+
+    def send_data(json)
+      data = JSON.parse(json)
+      @data << data
+      data
+    end
   end
 end
 
 RSpec.shared_context :bot do
-  let(:socket) { BotContext::FakeSocket.new }
-
-  let(:bot) { October::Bot.new(concurrency: :fake) }
-
-  let(:log) { StringIO.new }
-
-  before do
-
-  end
+  let(:shared_config) { Hash.new }
+  let(:bot) { October::Bot.new(concurrency: BotContext, shared: shared_config) }
 end

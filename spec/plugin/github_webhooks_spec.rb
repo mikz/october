@@ -19,11 +19,17 @@ RSpec.describe October::Plugin::GithubWebhooks::Server do
   let(:plugin_class) { October::Plugin::GithubWebhooks }
 
   let(:env) do
-    { 'october.bot' => bot, 'october.plugin' => plugin }
+    { 'october.bot' => bot, 'october.plugin' => plugin, 'october.dispatch' => 'sync' }
   end
 
+  let(:shared_config) { { 'github' => 'github' } }
+
   before do
-    # plugin.shared.merge!('github' => '#channel')
+    stub_request(:post, 'https://slack.com/api/rtm.start').
+        to_return(status: 200, body: { ok: true }.to_json, headers: {})
+
+    bot.client.slack.start_async
+    bot.client.slack.store.channels['github'] = { id: 'github', name: 'github' }
   end
 
   context 'deployment webhook' do
@@ -53,7 +59,7 @@ RSpec.describe October::Plugin::GithubWebhooks::Server do
     it 'works' do
       expect(plugin).to receive(:announce).with(an_instance_of(October::Plugin::GithubWebhooks::PullRequestEvent))
       post '/', headers: { 'X-GitHub-Event' => 'pull_request' }, params: webhook, env: env
-      expect(last_response.body).to eq('{"action":"synchronize","number":29}')
+      expect(last_response.body).to eq('{"assignee":null,"action":"synchronize","number":29,"user":"mikz"}')
     end
   end
 

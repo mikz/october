@@ -1,5 +1,5 @@
 require 'ostruct'
-require 'celluloid/current'
+require 'celluloid'
 
 module October
   module Plugin

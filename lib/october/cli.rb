@@ -101,7 +101,8 @@ module October
 
       shared = config.delete(:config)
 
-      config.merge(plugins: plugins, shared: shared )
+      config.merge(plugins: plugins, shared: shared,
+                   concurrency: Slack::RealTime::Concurrency::Celluloid)
     end
   end
 end
