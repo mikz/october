@@ -10,7 +10,7 @@ gem 'roda', '~> 3.9'
 
 group :test do
   gem 'webmock'
-
+  gem 'codecov', require: false
   gem 'rspec'
   gem 'rack-test'
 end
