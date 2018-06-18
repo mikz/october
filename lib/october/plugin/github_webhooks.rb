@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'october/plugin'
 require 'roda'
 require 'json'
@@ -11,13 +13,12 @@ module October
       include October::Plugin
 
       class Event < Struct.new(:payload, :name)
-
         # http://rubular.com/r/FuDNTjpWW8
-        EVENT_NAME = /(?<event>[^:]+?)(?:Event)?$/.freeze
+        EVENT_NAME = /(?<event>[^:]+?)(?:Event)?$/
 
-        NORMALIZE_NAME = ->(match) do
+        NORMALIZE_NAME = lambda do |match|
           # http://rubular.com/r/zA5ucftSdw
-          match[:event].gsub(/(\w)?([A-Z])/) { $~.captures.compact.join('_').downcase }
+          match[:event].gsub(/(\w)?([A-Z])/) { $LAST_MATCH_INFO.captures.compact.join('_').downcase }
         end
 
         class << self
@@ -30,7 +31,7 @@ module October
           class SignatureMismatchError < StandardError; end
 
           def verify_signature!(request, payload_body)
-            signature = 'sha1=' + OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha1'), ENV.fetch('GITHUB_SECURE_TOKEN'){ return }, payload_body)
+            signature = 'sha1=' + OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha1'), ENV.fetch('GITHUB_SECURE_TOKEN') { return }, payload_body)
             raise SignatureMismatchError, "Signatures didn't match!" unless Rack::Utils.secure_compare(signature, request.env.fetch('HTTP_X_HUB_SIGNATURE'))
           end
 
@@ -60,7 +61,7 @@ module October
         end
 
         def as_json(*)
-          { }
+          {}
         end
 
         def name
@@ -92,7 +93,7 @@ module October
         end
 
         def scope
-          super + [ environment ]
+          super + [environment]
         end
 
         def as_json(*)
@@ -110,14 +111,13 @@ module October
         end
 
         def scope
-          super + [ context ]
+          super + [context]
         end
 
         def as_json(*)
           { context: context, state: state }
         end
       end
-
 
       class PushEvent < Event
         attr_reader :ref, :before, :after
@@ -130,7 +130,7 @@ module October
         end
 
         def scope
-          super + [ ref ]
+          super + [ref]
         end
 
         def as_json(*)
@@ -147,7 +147,7 @@ module October
         end
 
         def scope
-          super + [ action ]
+          super + [action]
         end
 
         def as_json(*)
@@ -184,12 +184,13 @@ module October
 
       class IssuesEvent < Event
         attr_reader :label, :url
-        include EventAction, EventAssignee
+        include EventAssignee
+        include EventAction
 
         def initialize(*)
           super
           @url = payload.fetch('issue').fetch('url')
-          @label = payload.dig('label','name')
+          @label = payload.dig('label', 'name')
         end
 
         def as_json(*)
@@ -198,7 +199,8 @@ module October
       end
 
       class PullRequestEvent < Event
-        include EventAction, EventAssignee
+        include EventAssignee
+        include EventAction
         attr_reader :number, :url, :user
 
         def initialize(*)
@@ -223,7 +225,7 @@ module October
         end
 
         def scope
-          super + [ state ]
+          super + [state]
         end
 
         def as_json(*)
@@ -233,7 +235,6 @@ module October
 
       class Server < ::Roda
         route do |r|
-
           r.post do
             bot = env['october.bot']
             plugin = env['october.plugin']
@@ -253,7 +254,6 @@ module October
             event.to_json
           end
         end
-
       end
 
       app Server.app
@@ -261,11 +261,11 @@ module October
       self.plugin_name = 'github-webhooks'
 
       def announce(event)
-        channel = shared['github'] or fail 'missing channel configuration'
+        (channel = shared['github']) || raise('missing channel configuration')
         pub_chan = ([channel] + event.scope).join('.')
         Celluloid.publish(pub_chan, event)
 
-        october = client.channels[channel] or fail "unknown channel: #{channel}"
+        (october = client.channels[channel]) || raise("unknown channel: #{channel}")
 
         client.message(event, to: october)
       end

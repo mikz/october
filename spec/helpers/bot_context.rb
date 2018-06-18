@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module BotContext
   class Socket
     attr_reader :data
@@ -29,6 +31,6 @@ module BotContext
 end
 
 RSpec.shared_context :bot do
-  let(:shared_config) { Hash.new }
+  let(:shared_config) { {} }
   let(:bot) { October::Bot.new(concurrency: BotContext, shared: shared_config) }
 end

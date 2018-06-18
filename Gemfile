@@ -1,20 +1,21 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 
 ruby '~> 2.3'
 
-gem 'slack-ruby-client', '~> 0.6.0'
 gem 'celluloid-io'
-gem 'thor'
 gem 'rack'
 gem 'roda', '~> 3.9'
+gem 'slack-ruby-client', '~> 0.6.0'
+gem 'thor'
 
 group :test do
-  gem 'webmock'
   gem 'codecov', require: false
-  gem 'rspec'
   gem 'rack-test'
+  gem 'rspec'
+  gem 'webmock'
 end
 
-
-gem 'pry-byebug', group: :development
 gem 'octokit', '~> 4.2'
+gem 'pry-byebug', group: :development

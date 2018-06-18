@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'ostruct'
 require 'celluloid'
 
@@ -19,7 +21,7 @@ module October
 
     def initialize(bot)
       @bot = bot
-      @matchers = self.class.matchers.map{ |matcher| bot.register_matcher(matcher.call(self)) }
+      @matchers = self.class.matchers.map { |matcher| bot.register_matcher(matcher.call(self)) }
     end
 
     def shared
@@ -81,7 +83,7 @@ module October
           path = name.to_s
 
           if (i = path.rindex('::'))
-            path[(i+2)..-1]
+            path[(i + 2)..-1]
           else
             path
           end
@@ -132,7 +134,7 @@ module October
         end
 
         def to_proc
-          -> (message) do
+          lambda do |message|
             method, args = super.call(message)
 
             return unless method
@@ -146,7 +148,7 @@ module October
             elsif args.is_a?(Array)
               m.call(message, *args)
             else
-              fail "unknown handler format #{m} #{args}"
+              raise "unknown handler format #{m} #{args}"
             end
           end
         end
@@ -154,7 +156,7 @@ module October
 
       class MessageDelegator < SimpleDelegator
         def to_proc
-          -> (data) do
+          lambda do |data|
             message = Message.new(data)
             super.call(message)
           end
@@ -162,22 +164,22 @@ module October
       end
 
       def hello_handler
-        -> (_message) do
+        lambda do |_message|
           [@method]
         end
       end
 
       def message_handler
-        -> (message) do
-          match = message&.text&.match(@expression) or return
+        lambda do |message|
+          (match = message&.text&.match(@expression)) || return
 
           names = match.names
           captures = match.captures
 
           args = if names.size == captures.size
-            names.map(&:to_sym).zip(captures).to_h
-          else
-            captures
+                   names.map(&:to_sym).zip(captures).to_h
+                 else
+                   captures
           end
 
           [@method, args]

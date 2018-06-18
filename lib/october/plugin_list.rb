@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module October
   class PluginList
     def initialize(bot, plugins = [])
@@ -6,7 +8,7 @@ module October
     end
 
     def [](name)
-      @plugins.find{ |plugin| plugin.class.plugin_name == name }
+      @plugins.find { |plugin| plugin.class.plugin_name == name }
     end
 
     # @param [Class<Plugin>] plugin

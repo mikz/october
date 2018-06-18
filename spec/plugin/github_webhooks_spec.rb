@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'october/plugin/github_webhooks'
 
 RSpec.describe October::Plugin::GithubWebhooks do
@@ -10,7 +12,6 @@ RSpec.describe October::Plugin::GithubWebhooks do
     expect(described_class)
   end
 end
-
 
 RSpec.describe October::Plugin::GithubWebhooks::Server do
   include_context :rack
@@ -25,8 +26,8 @@ RSpec.describe October::Plugin::GithubWebhooks::Server do
   let(:shared_config) { { 'github' => 'github' } }
 
   before do
-    stub_request(:post, 'https://slack.com/api/rtm.start').
-        to_return(status: 200, body: { ok: true }.to_json, headers: {})
+    stub_request(:post, 'https://slack.com/api/rtm.start')
+      .to_return(status: 200, body: { ok: true }.to_json, headers: {})
 
     bot.client.slack.start_async
     bot.client.slack.store.channels['github'] = { id: 'github', name: 'github' }
@@ -52,7 +53,6 @@ RSpec.describe October::Plugin::GithubWebhooks::Server do
     end
   end
 
-
   context 'pull_request webhook' do
     let(:webhook) { open('spec/fixtures/webhooks/pull_request.json').read }
 
@@ -62,7 +62,6 @@ RSpec.describe October::Plugin::GithubWebhooks::Server do
       expect(last_response.body).to eq('{"assignee":null,"action":"synchronize","number":29,"user":"mikz"}')
     end
   end
-
 
   context 'push webhook' do
     let(:webhook) { open('spec/fixtures/webhooks/push.json').read }
@@ -83,5 +82,4 @@ RSpec.describe October::Plugin::GithubWebhooks::Server do
       expect(last_response.body).to eq('{"context":"continuous-integration/travis-ci/push","state":"pending"}')
     end
   end
-
 end

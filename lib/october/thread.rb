@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module October
   module Thread
     def in_thread(&block)

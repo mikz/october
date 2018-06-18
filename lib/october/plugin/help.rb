@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'october/plugin'
 
 module October

@@ -15,8 +15,8 @@ RSpec.describe October::Plugin::Help do
   end
 
   before do
-    stub_request(:post, 'https://slack.com/api/rtm.start').
-        to_return(status: 200, body: { ok: true }.to_json, headers: {})
+    stub_request(:post, 'https://slack.com/api/rtm.start')
+      .to_return(status: 200, body: { ok: true }.to_json, headers: {})
 
     bot.client.slack.start_async
   end

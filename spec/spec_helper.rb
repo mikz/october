@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'webmock/rspec'
 
 # rubocop:disable Style/GlobalVars
@@ -9,7 +11,7 @@ if ENV['CI']
   require 'codecov'
   SimpleCov.start
   SimpleCov.formatters = [
-      SimpleCov::Formatter::Codecov
+    SimpleCov::Formatter::Codecov
   ]
 end
 
