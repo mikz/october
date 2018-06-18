@@ -18,6 +18,8 @@ module October
     end
 
     route do |r|
+      env['october.dispatch'] = 'async'
+
       bot = env['october.bot'] = opts[:bot]
 
       # as the bot might be started after booting the server

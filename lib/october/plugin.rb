@@ -137,7 +137,7 @@ module October
           lambda do |message|
             method, args = super.call(message)
 
-            return unless method
+            break unless method
 
             m = @object.method(method)
 

@@ -65,6 +65,10 @@ module October
         @name = name.freeze
       end
 
+      def as_json(options = nil)
+        id.as_json(options)
+      end
+
       def to_s
         id
       end
