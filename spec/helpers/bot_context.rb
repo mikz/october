@@ -10,8 +10,8 @@ module BotContext
       @data = []
     end
 
-    def start_async
-      yield
+    def start_async(client)
+      client.run_loop
     end
 
     def connect!
