@@ -1,10 +1,3 @@
-begin
-  require 'codeclimate-test-reporter'
-  CodeClimate::TestReporter.start
-rescue LoadError => error
-  warn "could not load: #{error}"
-end
-
 require 'october'
 
 require 'webmock/rspec'
