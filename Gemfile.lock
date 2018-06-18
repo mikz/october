@@ -65,7 +65,7 @@ GEM
     rack (2.0.5)
     rack-test (0.6.3)
       rack (>= 1.0)
-    rake (10.5.0)
+    rake (12.3.1)
     roda (2.10.0)
       rack
     rspec (3.7.0)
@@ -118,7 +118,7 @@ DEPENDENCIES
   octokit (~> 4.2)
   pry-byebug
   rack-test
-  rake (~> 10.0)
+  rake (~> 12.3)
   rspec (~> 3.2)
   webmock
 
