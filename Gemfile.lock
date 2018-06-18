@@ -65,8 +65,8 @@ GEM
       pry (~> 0.10)
     public_suffix (3.0.2)
     rack (2.0.5)
-    rack-test (0.6.3)
-      rack (>= 1.0)
+    rack-test (1.0.0)
+      rack (>= 1.0, < 3)
     rake (12.3.1)
     roda (2.10.0)
       rack
