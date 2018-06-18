@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'october/plugin'
 require 'octokit'
 
@@ -23,13 +25,13 @@ module October
 
       match /\s(\w+): (\{.+\})$/, prefix: 'github event'
 
-      def execute(m, event, payload)
+      def execute(_m, event, payload)
         handler = "handle_#{event}"
 
         if respond_to?(handler)
           public_send(handler, payload)
         else
-          @bot.logger.debug  "[plugin] #{self.class.plugin_name}: no handler for #{event}"
+          @bot.logger.debug "[plugin] #{self.class.plugin_name}: no handler for #{event}"
         end
       end
 
@@ -39,7 +41,7 @@ module October
 
       def handle_deployment_status(payload)
         info = JSON.parse(payload)
-        channel.send "Hah, deployed!"
+        channel.send 'Hah, deployed!'
       end
 
       def new_webhook(topic, event)
@@ -54,7 +56,6 @@ module October
         end
       end
 
-
       def assigned(event)
         member = teams.find do |team|
           team.has_member?(event.assignee)
@@ -66,24 +67,21 @@ module October
         end
       end
 
-      alias_method :issues_assigned, :assigned
-      alias_method :pull_request_assigned, :assigned
+      alias issues_assigned assigned
+      alias pull_request_assigned assigned
 
       def pull_request_opened(event)
         unless event.assignee
           issue = Issue.new(client.get(event.url))
 
-          unless issue.assignee
-            assign_user(issue, event.user)
-          end
+          assign_user(issue, event.user) unless issue.assignee
         end
       end
+
       protected
 
       def finalize
-        if @subscriber
-          unsubscribe(@subscriber)
-        end
+        unsubscribe(@subscriber) if @subscriber
       end
 
       def assign_team(issue, team)
@@ -141,7 +139,9 @@ module October
       end
 
       class Team
-        def self.to_proc; ->(octokit) { new(octokit) }; end
+        def self.to_proc
+          ->(octokit) { new(octokit) }
+        end
 
         def initialize(octokit)
           @octokit = octokit
@@ -169,9 +169,7 @@ module October
       def channel_pattern
         channel = (shared['channel'] || shared['github'])
 
-        if channel
-          /^#{channel}/
-        end
+        /^#{channel}/ if channel
       end
     end
   end

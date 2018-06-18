@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require 'rack/test'
 
 module Rack
   module Test
     module MethodGenerator
-      HTTP_METHODS = %I[get post put patch options head delete]
+      HTTP_METHODS = %I[get post put patch options head delete].freeze
 
       def self.eval(binding, &block)
         source_location = block.source_location
@@ -26,7 +28,7 @@ module Rack
     end
 
     module HeaderMethods
-      CONTENT_TYPE = 'CONTENT_TYPE'.freeze
+      CONTENT_TYPE = 'CONTENT_TYPE'
       include KeywordMethods
 
       MethodGenerator.eval(binding) do |method|

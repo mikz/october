@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rack'
 require 'roda'
 
@@ -16,13 +18,13 @@ module October
     end
 
     route do |r|
-      bot = env['october.bot'.freeze] = opts[:bot]
+      bot = env['october.bot'] = opts[:bot]
 
       # as the bot might be started after booting the server
       r.class.refresh_multi_run_regexp!
 
       r.multi_run do |prefix|
-        env['october.plugin'.freeze] = bot.plugins[prefix]
+        env['october.plugin'] = bot.plugins[prefix]
       end
     end
   end

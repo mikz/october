@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'slack-ruby-client'
 
 module October
@@ -6,7 +8,7 @@ module October
     alias slack client
     private :client, :logger
 
-    def initialize(token:, concurrency:, logger: )
+    def initialize(token:, concurrency:, logger:)
       @logger = logger
       @client = Slack::RealTime::Client.new(token: token,
                                             concurrency: concurrency)
@@ -30,7 +32,7 @@ module October
       message(text, to: to.channel)
     end
 
-    def message(text, to: )
+    def message(text, to:)
       client.message channel: to, text: text.to_s
     end
 
@@ -46,19 +48,19 @@ module October
       end
 
       def [](name)
-        @channels.find{ |channel| channel.name == name }
+        @channels.find { |channel| channel.name == name }
       end
     end
 
     class Channel
       def self.to_proc
-        to_attributes = lambda { |(_id, options)| options.map{|k,v| [ k.to_sym, v ] }.to_h }
-        ->(channel) { new(to_attributes.(channel)) }
+        to_attributes = ->((_id, options)) { options.map { |k, v| [k.to_sym, v] }.to_h }
+        ->(channel) { new(to_attributes.call(channel)) }
       end
 
       attr_reader :id, :name
 
-      def initialize(id: , name: , **rest)
+      def initialize(id:, name:, **_rest)
         @id = id.freeze
         @name = name.freeze
       end

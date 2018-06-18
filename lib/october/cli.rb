@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'thor'
 
 begin
-require 'pry'
+  require 'pry'
 rescue LoadError
 end
 
@@ -12,7 +14,6 @@ require 'october/plugin/github_webhooks'
 
 module October
   class CLI < Thor
-
     desc 'start', 'start irc both and web server'
     method_option :token, type: :string, required: true
     method_option :channels, type: :array
@@ -42,7 +43,7 @@ module October
 
       binding.receiver.extend(ConsoleMethods)
 
-      set_sticky_variables = -> (_, _, pry) do
+      set_sticky_variables = lambda do |_, _, pry|
         pry.add_sticky_local(:bot) { bot }
         pry.add_sticky_local(:app) { app }
         pry.add_sticky_local(:server) { server }
@@ -54,7 +55,6 @@ module October
     private
 
     def boot
-
       bot = new_bot
       app = new_app
 
@@ -78,7 +78,11 @@ module October
 
     module ConsoleMethods
       def reload!
-        Object.send(:remove_const, :October) rescue nil
+        begin
+          Object.send(:remove_const, :October)
+        rescue StandardError
+          nil
+        end
         $LOADED_FEATURES.reject! { |f| f.start_with?(Dir.pwd) }
         require 'october'
       end
@@ -89,14 +93,14 @@ module October
 
       values = options.values_at(*available)
 
-      config = available.zip(values).select{ |(_, val)| val }.to_h
+      config = available.zip(values).select { |(_, val)| val }.to_h
 
       plugins = {
-          plugins: [
-              October::Plugin::GithubWebhooks,
-              October::Plugin::Github,
-              October::Plugin::Hello,
-          ]
+        plugins: [
+          October::Plugin::GithubWebhooks,
+          October::Plugin::Github,
+          October::Plugin::Hello
+        ]
       }
 
       shared = config.delete(:config)

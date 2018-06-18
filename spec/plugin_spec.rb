@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe October::Plugin do
   subject(:mod) { described_class }
 
@@ -25,17 +27,16 @@ RSpec.describe October::Plugin do
     end
 
     it 'mounts app' do
-      plugin.mount('prefix', app = Proc.new{})
+      plugin.mount('prefix', app = proc {})
       expect(plugin.mounts).to eq('prefix' => app)
     end
 
     it 'registers mounted app' do
-      plugin.mount('prefix', app = Proc.new{})
+      plugin.mount('prefix', app = proc {})
 
       expect(October::Server).to receive(:run).with('prefix', app)
 
       plugin.new(bot).__register
     end
   end
-
 end
