@@ -2,13 +2,17 @@ source 'https://rubygems.org'
 
 ruby '~> 2.3'
 
-# Specify your gem's dependencies in october.gemspec
-gemspec
+gem 'slack-ruby-client', '~> 0.6.0'
+gem 'celluloid-io'
+gem 'thor'
+gem 'rack'
+gem 'roda', '~> 3.9'
 
 group :test do
-  gem 'codeclimate-test-reporter', require: nil
-
   gem 'webmock'
+  gem 'codecov', require: false
+  gem 'rspec'
+  gem 'rack-test'
 end
 
 
