@@ -55,7 +55,7 @@ GEM
     minitest (5.11.3)
     multipart-post (2.0.0)
     nio4r (2.3.1)
-    octokit (4.9.0)
+    octokit (4.10.0)
       sawyer (~> 0.8.0, >= 0.5.3)
     pry (0.11.3)
       coderay (~> 1.1.0)
