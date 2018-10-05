@@ -30,7 +30,7 @@ GEM
       timers (>= 4.1.1)
     celluloid-supervision (0.20.6)
       timers (>= 4.1.1)
-    codecov (0.1.10)
+    codecov (0.1.11)
       json
       simplecov
       url
