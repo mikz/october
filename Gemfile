@@ -11,7 +11,7 @@ gem 'slack-ruby-client', '~> 0.11.1'
 gem 'thor'
 
 group :test do
-  gem 'codecov', require: false
+  gem 'codecov', '>= 0.1.13', require: false
   gem 'rack-test'
   gem 'rspec'
   gem 'webmock'
