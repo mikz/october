@@ -5,14 +5,14 @@ source 'https://rubygems.org'
 ruby '~> 2.3'
 
 gem 'celluloid-io'
-gem 'rack'
-gem 'roda', '~> 3.9'
+gem 'rack', '>= 2.1.4'
+gem 'roda', '~> 3.21', '>= 3.21.0'
 gem 'slack-ruby-client', '~> 0.11.1'
 gem 'thor'
 
 group :test do
   gem 'codecov', require: false
-  gem 'rack-test'
+  gem 'rack-test', '>= 1.1.0'
   gem 'rspec'
   gem 'webmock'
 end
