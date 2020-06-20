@@ -64,10 +64,10 @@ GEM
       byebug (~> 10.0)
       pry (~> 0.10)
     public_suffix (3.1.0)
-    rack (2.0.7)
+    rack (2.2.3)
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
-    roda (3.21.0)
+    roda (3.33.0)
       rack
     rspec (3.8.0)
       rspec-core (~> 3.8.0)
@@ -121,9 +121,9 @@ DEPENDENCIES
   codecov
   octokit (~> 4.2)
   pry-byebug
-  rack
-  rack-test
-  roda (~> 3.9)
+  rack (>= 2.1.4)
+  rack-test (>= 1.1.0)
+  roda (~> 3.21, >= 3.21.0)
   rspec
   slack-ruby-client (~> 0.11.1)
   thor
@@ -133,4 +133,4 @@ RUBY VERSION
    ruby 2.3.1p112
 
 BUNDLED WITH
-   1.16.2
+   1.17.3
