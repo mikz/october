@@ -14,8 +14,8 @@ group :test do
   gem 'codecov', require: false
   gem 'rack-test'
   gem 'rspec'
-  gem 'webmock'
+  gem 'webmock', '>= 3.6.0'
 end
 
-gem 'octokit', '~> 4.2'
+gem 'octokit', '~> 4.13', '>= 4.13.0'
 gem 'pry-byebug', group: :development
