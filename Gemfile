@@ -5,8 +5,8 @@ source 'https://rubygems.org'
 ruby '~> 2.3'
 
 gem 'celluloid-io'
-gem 'rack'
-gem 'roda', '~> 3.9'
+gem 'rack', '>= 2.0.9.2'
+gem 'roda', '~> 3.21', '>= 3.21.0'
 gem 'slack-ruby-client', '~> 0.11.1'
 gem 'thor'
 
