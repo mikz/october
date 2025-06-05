@@ -6,16 +6,16 @@ ruby '~> 2.3'
 
 gem 'celluloid-io'
 gem 'rack'
-gem 'roda', '~> 3.9'
+gem 'roda', '~> 3.22', '>= 3.22.0'
 gem 'slack-ruby-client', '~> 0.11.1'
 gem 'thor'
 
 group :test do
   gem 'codecov', require: false
-  gem 'rack-test'
+  gem 'rack-test', '>= 2.0.0'
   gem 'rspec'
   gem 'webmock'
 end
 
-gem 'octokit', '~> 4.2'
+gem 'octokit', '~> 4.14', '>= 4.14.0'
 gem 'pry-byebug', group: :development
