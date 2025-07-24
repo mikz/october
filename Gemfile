@@ -8,7 +8,7 @@ gem 'celluloid-io'
 gem 'rack'
 gem 'roda', '~> 3.9'
 gem 'slack-ruby-client', '~> 0.11.1'
-gem 'thor'
+gem 'thor', '>= 1.4.0'
 
 group :test do
   gem 'codecov', require: false
