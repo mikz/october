@@ -7,7 +7,7 @@ ruby '~> 2.3'
 gem 'celluloid-io'
 gem 'rack'
 gem 'roda', '~> 3.9'
-gem 'slack-ruby-client', '~> 0.11.1'
+gem 'slack-ruby-client', '~> 1.1.0'
 gem 'thor'
 
 group :test do
@@ -17,5 +17,5 @@ group :test do
   gem 'webmock'
 end
 
-gem 'octokit', '~> 4.2'
+gem 'octokit', '~> 4.23', '>= 4.23.0'
 gem 'pry-byebug', group: :development
